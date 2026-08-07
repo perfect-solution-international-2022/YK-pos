@@ -357,7 +357,7 @@ export default function ProductEditPage({
       />
 
       {showDraftBanner && draft.restored && (
-        <div className="flex flex-col gap-3 rounded-2xl border border-secondary/40 bg-secondary/5 p-4 sm:flex-row sm:items-center sm:justify-between dark:border-blue-500/40 dark:bg-blue-500/10">
+        <div className="flex flex-col gap-3 rounded-2xl border border-secondary/40 bg-secondary/5 p-4 sm:flex-row sm:items-center sm:justify-between dark:border-green-600/40 dark:bg-green-600/10">
           <p className="flex items-center gap-2 text-sm text-on-surface dark:text-zinc-100">
             <History size={16} aria-hidden className="shrink-0" />
             Unsaved draft from{" "}

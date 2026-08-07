@@ -228,7 +228,7 @@ export default function SettingsPage() {
           </div>
           <Link
             href={ROUTES.settings.hardware}
-            className="mt-4 inline-block text-sm font-medium text-primary hover:underline dark:text-blue-400"
+            className="mt-4 inline-block text-sm font-medium text-primary hover:underline dark:text-green-400"
           >
             Hardware setup →
           </Link>

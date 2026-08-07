@@ -113,7 +113,7 @@ export default function BatchesPage() {
       render: (batch) => (
         <Link
           href={ROUTES.productDetail(batch.product_id)}
-          className="font-medium text-primary hover:underline dark:text-blue-400"
+          className="font-medium text-primary hover:underline dark:text-green-400"
         >
           {batch.product_name}
         </Link>
@@ -175,7 +175,7 @@ export default function BatchesPage() {
           href={ROUTES.productDetail(batch.product_id)}
           aria-label={`View ${batch.product_name}`}
           title="View"
-          className={`${ACTION_BUTTON_CLASSES} text-secondary hover:bg-surface-container dark:text-blue-400 dark:hover:bg-zinc-800`}
+          className={`${ACTION_BUTTON_CLASSES} text-secondary hover:bg-surface-container dark:text-green-400 dark:hover:bg-zinc-800`}
         >
           <Eye size={15} aria-hidden />
         </Link>
@@ -230,7 +230,7 @@ export default function BatchesPage() {
           </div>
           <p className="text-xs text-on-surface-variant dark:text-zinc-500">
             Expiry warning window (days):{" "}
-            <span className="font-medium text-secondary dark:text-blue-400">
+            <span className="font-medium text-secondary dark:text-green-400">
               {settings.expiry_warning_days}
             </span>
           </p>

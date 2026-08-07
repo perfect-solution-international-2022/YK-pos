@@ -33,7 +33,7 @@ export default function ForgotPasswordPage() {
   if (sent) {
     return (
       <div className="flex w-full flex-col gap-5">
-        <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#004b1e] text-[#bbf7d0]">
+        <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#0d7a3d] text-[#bbf7d0]">
           <MailCheck size={20} />
         </span>
         <div className="flex flex-col gap-1">
@@ -58,7 +58,7 @@ export default function ForgotPasswordPage() {
             </p>
             <Link
               href={`${ROUTES.auth.resetPassword}?token=${devToken}`}
-              className="mt-2 block break-all font-mono text-primary hover:underline dark:text-blue-400"
+              className="mt-2 block break-all font-mono text-primary hover:underline dark:text-green-400"
             >
               {devToken}
             </Link>
@@ -67,7 +67,7 @@ export default function ForgotPasswordPage() {
 
         <Link
           href={ROUTES.auth.login}
-          className="text-sm font-medium text-primary hover:underline dark:text-blue-400"
+          className="text-sm font-medium text-primary hover:underline dark:text-green-400"
         >
           Back to sign in
         </Link>
@@ -107,7 +107,7 @@ export default function ForgotPasswordPage() {
       </form>
       <Link
         href={ROUTES.auth.login}
-        className="text-center text-sm font-medium text-primary hover:underline dark:text-blue-400"
+        className="text-center text-sm font-medium text-primary hover:underline dark:text-green-400"
       >
         Back to sign in
       </Link>

@@ -108,7 +108,7 @@ export function PermissionPicker({
                           : Array.from(new Set([...value, ...permissions])),
                       )
                     }
-                    className="rounded text-xs font-medium text-primary transition-colors duration-[var(--duration-fast)] hover:underline dark:text-blue-400"
+                    className="rounded text-xs font-medium text-primary transition-colors duration-[var(--duration-fast)] hover:underline dark:text-green-400"
                   >
                     {allChecked ? "None" : "All"}
                   </button>
@@ -130,7 +130,7 @@ export function PermissionPicker({
                       {actionOf(permission)}
                       <span
                         title={`${ACTION_HINTS[permission] ?? permission} (${permission})`}
-                        className="inline-flex cursor-help text-primary dark:text-blue-400"
+                        className="inline-flex cursor-help text-primary dark:text-green-400"
                       >
                         <HelpCircle
                           size={13}

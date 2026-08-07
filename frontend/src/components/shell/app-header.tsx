@@ -254,7 +254,7 @@ export function AppHeader() {
         <span
           className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-bold transition-colors duration-[var(--duration-base)] ease-[var(--ease-standard)] ${
             online
-              ? "bg-[#004b1e] text-[#bbf7d0] dark:bg-green-900/50 dark:text-green-300"
+              ? "bg-[#0d7a3d] text-[#bbf7d0] dark:bg-green-900/50 dark:text-green-300"
               : "bg-error text-on-error dark:bg-red-900/50 dark:text-red-300"
           }`}
         >
@@ -306,7 +306,7 @@ export function AppHeader() {
                   }}
                   className={`flex w-full items-center justify-between px-4 py-2 text-sm transition-colors hover:bg-surface-container dark:hover:bg-zinc-800 ${
                     settings.locale === option.code
-                      ? "font-semibold text-primary dark:text-blue-400"
+                      ? "font-semibold text-primary dark:text-green-400"
                       : "text-on-surface dark:text-zinc-100"
                   }`}
                 >
@@ -344,7 +344,7 @@ export function AppHeader() {
                     {user?.email}
                   </p>
                   {staff && (
-                    <p className="mt-1 text-xs font-semibold text-primary dark:text-blue-400">
+                    <p className="mt-1 text-xs font-semibold text-primary dark:text-green-400">
                       {staff.roleName}
                     </p>
                   )}

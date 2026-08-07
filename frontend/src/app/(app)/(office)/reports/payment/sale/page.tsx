@@ -124,7 +124,7 @@ export default function PaymentSalesReportPage() {
       render: (r) => (
         <Link
           href={ROUTES.sales.root}
-          className="font-medium text-primary hover:underline dark:text-blue-400"
+          className="font-medium text-primary hover:underline dark:text-green-400"
         >
           {r.saleRef}
         </Link>
@@ -194,7 +194,7 @@ export default function PaymentSalesReportPage() {
                   onClick={() => setPreset(option.value)}
                   className={`min-h-9 rounded-lg border px-3 text-xs font-semibold transition-colors duration-[var(--duration-fast)] ${
                     preset === option.value
-                      ? "border-primary bg-primary/10 text-primary dark:border-blue-400 dark:bg-blue-400/10 dark:text-blue-400"
+                      ? "border-primary bg-primary/10 text-primary dark:border-green-400 dark:bg-green-400/10 dark:text-green-400"
                       : "border-outline-variant text-on-surface-variant hover:bg-surface-container dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800"
                   }`}
                 >
@@ -274,7 +274,7 @@ export default function PaymentSalesReportPage() {
                   <XAxis dataKey="date" tick={{ fontSize: 11 }} />
                   <YAxis tick={{ fontSize: 11 }} />
                   <Tooltip formatter={(value) => money(Number(value) * 100)} />
-                  <Line type="monotone" dataKey="amount" stroke="#3987e5" strokeWidth={2} dot={false} />
+                  <Line type="monotone" dataKey="amount" stroke="#2e7d32" strokeWidth={2} dot={false} />
                 </LineChart>
               </ResponsiveContainer>
             </div>
@@ -297,7 +297,7 @@ export default function PaymentSalesReportPage() {
                   <XAxis type="number" tick={{ fontSize: 11 }} />
                   <YAxis type="category" dataKey="method" tick={{ fontSize: 11 }} width={60} />
                   <Tooltip formatter={(value) => money(Number(value) * 100)} />
-                  <Bar dataKey="amount" fill="#3987e5" radius={[0, 4, 4, 0]} />
+                  <Bar dataKey="amount" fill="#2e7d32" radius={[0, 4, 4, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>

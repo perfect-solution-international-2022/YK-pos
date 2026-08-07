@@ -237,7 +237,7 @@ export default function CategoriesPage() {
       header: "Category Code",
       sortValue: (category) => category.code,
       render: (category) => (
-        <span className="font-medium text-secondary dark:text-blue-400">
+        <span className="font-medium text-secondary dark:text-green-400">
           {category.code}
         </span>
       ),

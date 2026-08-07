@@ -292,7 +292,7 @@ function createProductColumns({
             href={ROUTES.productDetail(product.id)}
             aria-label={`View ${product.name}`}
             title="View"
-            className={`${ACTION_BUTTON_CLASSES} text-secondary hover:bg-surface-container dark:text-blue-400 dark:hover:bg-zinc-800`}
+            className={`${ACTION_BUTTON_CLASSES} text-secondary hover:bg-surface-container dark:text-green-400 dark:hover:bg-zinc-800`}
           >
             <Eye size={15} aria-hidden />
           </Link>

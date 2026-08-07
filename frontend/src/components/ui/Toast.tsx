@@ -29,14 +29,14 @@ const ToastContext = createContext<ToastContextValue | null>(null);
 const TOAST_TIMEOUT_MS = 4000;
 
 const VARIANT_CLASSES: Record<ToastVariant, string> = {
-  info: "border-secondary dark:border-blue-400",
+  info: "border-secondary dark:border-green-400",
   success: "border-on-tertiary-container dark:border-green-400",
   warning: "border-amber-500 dark:border-amber-400",
   error: "border-error dark:border-red-400",
 };
 
 const VARIANT_ICONS: Record<ToastVariant, ReactNode> = {
-  info: <Info size={16} className="text-secondary dark:text-blue-400" />,
+  info: <Info size={16} className="text-secondary dark:text-green-400" />,
   success: (
     <CheckCircle2
       size={16}

@@ -35,7 +35,7 @@ const KIND_TONE: Record<NotificationKind, string> = {
   out_of_stock: "text-error dark:text-red-400",
   expiry: "text-amber-600 dark:text-amber-400",
   expired: "text-error dark:text-red-400",
-  sync: "text-secondary dark:text-blue-400",
+  sync: "text-secondary dark:text-green-400",
   system: "text-on-surface-variant dark:text-zinc-400",
 };
 
@@ -120,7 +120,7 @@ export function NotificationPanel() {
               <button
                 type="button"
                 onClick={() => void markAllNotificationsRead()}
-                className="inline-flex items-center gap-1 text-xs font-medium text-primary transition-opacity duration-[var(--duration-fast)] hover:underline hover:opacity-80 dark:text-blue-400"
+                className="inline-flex items-center gap-1 text-xs font-medium text-primary transition-opacity duration-[var(--duration-fast)] hover:underline hover:opacity-80 dark:text-green-400"
               >
                 <CheckCheck size={13} />
                 Mark all read

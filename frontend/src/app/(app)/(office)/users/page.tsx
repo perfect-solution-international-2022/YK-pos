@@ -124,7 +124,7 @@ export default function UsersPage() {
       hideOnMobile: true,
       sortValue: (user) => displayUsername(user),
       render: (user) => (
-        <span className="block min-w-28 max-w-40 truncate text-primary dark:text-blue-400">
+        <span className="block min-w-28 max-w-40 truncate text-primary dark:text-green-400">
           {displayUsername(user)}
         </span>
       ),
@@ -136,7 +136,7 @@ export default function UsersPage() {
       render: (user) => (
         <a
           href={`mailto:${user.email}`}
-          className="block min-w-48 max-w-64 truncate text-primary hover:underline dark:text-blue-400"
+          className="block min-w-48 max-w-64 truncate text-primary hover:underline dark:text-green-400"
         >
           {user.email}
         </a>

@@ -7,8 +7,8 @@ export default function manifest(): MetadataRoute.Manifest {
     description: "Local-first point of sale app",
     start_url: "/",
     display: "standalone",
-    background_color: "#060610",
-    theme_color: "#09090b",
+    background_color: "#0b160a",
+    theme_color: "#14591d",
     icons: [
       {
         src: "/icons/icon-192.png",

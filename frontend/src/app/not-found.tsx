@@ -4,7 +4,7 @@ import { ROUTES } from "@/lib/types/routes";
 export default function NotFound() {
   return (
     <main className="flex flex-1 flex-col items-center justify-center gap-4 bg-surface p-8 text-center dark:bg-zinc-950">
-      <p className="text-xs font-semibold uppercase tracking-widest text-primary dark:text-blue-400">
+      <p className="text-xs font-semibold uppercase tracking-widest text-primary dark:text-green-400">
         Error 404
       </p>
       <h1 className="text-2xl font-semibold text-on-surface dark:text-zinc-50">

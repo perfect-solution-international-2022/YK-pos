@@ -103,7 +103,7 @@ function ResetPasswordForm() {
 
       <Link
         href={ROUTES.auth.forgotPassword}
-        className="text-center text-sm font-medium text-primary hover:underline dark:text-blue-400"
+        className="text-center text-sm font-medium text-primary hover:underline dark:text-green-400"
       >
         Request a new link
       </Link>

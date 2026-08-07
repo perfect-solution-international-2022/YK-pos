@@ -124,7 +124,7 @@ export default function SuppliersManagementPage() {
       header: "Name",
       sortValue: (supplier) => supplier.name,
       render: (supplier) => (
-        <span className="font-medium text-secondary dark:text-blue-400">{supplier.name}</span>
+        <span className="font-medium text-secondary dark:text-green-400">{supplier.name}</span>
       ),
     },
     { key: "phone", header: "Phone", render: (supplier) => supplier.phone ?? "—" },
@@ -132,7 +132,7 @@ export default function SuppliersManagementPage() {
       key: "email",
       header: "Email",
       render: (supplier) => (
-        <span className="text-secondary dark:text-blue-400">{supplier.email ?? "—"}</span>
+        <span className="text-secondary dark:text-green-400">{supplier.email ?? "—"}</span>
       ),
     },
     {

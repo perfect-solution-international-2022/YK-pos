@@ -70,7 +70,7 @@ function HelpHint({ text }: Readonly<{ text: string }>) {
   return (
     <span
       title={text}
-      className="inline-flex cursor-help text-primary dark:text-blue-400"
+      className="inline-flex cursor-help text-primary dark:text-green-400"
     >
       <HelpCircle size={14} aria-label={text} />
     </span>

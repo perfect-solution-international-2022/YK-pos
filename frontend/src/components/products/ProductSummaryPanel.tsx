@@ -32,7 +32,7 @@ function Row({
       <dd
         className={`min-w-0 truncate text-sm font-semibold tabular-nums ${
           accent
-            ? "text-primary dark:text-blue-400"
+            ? "text-primary dark:text-green-400"
             : "text-on-surface dark:text-zinc-50"
         } ${mono ? "font-mono text-xs" : ""}`}
       >

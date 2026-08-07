@@ -27,8 +27,8 @@ const ACCENT_CLASSES: Record<StatAccent, string> = {
   secondary: "bg-secondary text-on-secondary",
   warning: "bg-amber-500 text-white",
   error: "bg-error text-on-error",
-  success: "bg-[#004b1e] text-[#22c55e]",
-  info: "bg-sky-600 text-white dark:bg-sky-500",
+  success: "bg-[#0d7a3d] text-[#6ee7a5]",
+  info: "bg-amber-600 text-white dark:bg-amber-500",
   orange: "bg-orange-600 text-white dark:bg-orange-500",
 };
 
@@ -57,7 +57,7 @@ export function StatCard({
           <span
             className={`flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-bold ${
               positive
-                ? "bg-[#004b1e] text-[#bbf7d0] dark:bg-green-900/40 dark:text-green-400"
+                ? "bg-[#0d7a3d] text-[#bbf7d0] dark:bg-green-900/40 dark:text-green-400"
                 : "bg-error/15 text-error dark:bg-red-900/40 dark:text-red-400"
             }`}
           >

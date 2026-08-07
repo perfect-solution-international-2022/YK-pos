@@ -252,7 +252,7 @@ export function Combobox({
                     )}
                   </span>
                   {option.value === value && (
-                    <Check size={15} className="shrink-0 text-secondary dark:text-blue-400" />
+                    <Check size={15} className="shrink-0 text-secondary dark:text-green-400" />
                   )}
                 </li>
               ))}
@@ -267,7 +267,7 @@ export function Combobox({
                     event.preventDefault();
                     commit(trimmedQuery);
                   }}
-                  className={`flex min-h-11 cursor-pointer items-center gap-2 px-3 py-2 text-sm font-medium text-secondary transition-colors duration-[var(--duration-instant)] dark:text-blue-400 ${
+                  className={`flex min-h-11 cursor-pointer items-center gap-2 px-3 py-2 text-sm font-medium text-secondary transition-colors duration-[var(--duration-instant)] dark:text-green-400 ${
                     activeIndex === filtered.length
                       ? "bg-surface-container dark:bg-zinc-800"
                       : ""

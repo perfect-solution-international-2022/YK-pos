@@ -31,7 +31,7 @@ const LABEL_LINE_HEIGHT = 12;
 const INITIAL_AZIMUTH = -0.55;
 const GROW_DURATION = 650;
 const AUTO_ROTATE_SPEED = 0.0025;
-const PLOT_BACKGROUND = "#0a0a0f";
+const PLOT_BACKGROUND = "#0b160a";
 const MAX_DPR = 2;
 /** Light direction in view space, so the lit side follows the camera. */
 const LIGHT_X = -0.55;

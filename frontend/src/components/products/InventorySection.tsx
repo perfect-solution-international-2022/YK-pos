@@ -227,7 +227,7 @@ export function InventorySection({
                 onClick={() => setCreateUnitOpen(true)}
                 aria-label="Add new product unit"
                 title="Add new product unit"
-                className="flex h-[42px] w-12 shrink-0 items-center justify-center rounded-lg bg-secondary text-on-secondary transition-all duration-[var(--duration-fast)] ease-[var(--ease-standard)] hover:bg-secondary/90 active:scale-95 dark:bg-blue-500 dark:text-white dark:hover:bg-blue-600"
+                className="flex h-[42px] w-12 shrink-0 items-center justify-center rounded-lg bg-secondary text-on-secondary transition-all duration-[var(--duration-fast)] ease-[var(--ease-standard)] hover:bg-secondary/90 active:scale-95 dark:bg-green-600 dark:text-white dark:hover:bg-green-600"
               >
                 <Plus size={18} />
               </button>

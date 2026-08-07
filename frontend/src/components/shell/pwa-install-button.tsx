@@ -42,7 +42,7 @@ export function PwaInstallButton() {
     <button
       type="button"
       onClick={handleInstall}
-      className="animate-fade-in-up mt-2 rounded-full border border-white/15 bg-white/5 px-8 py-3 text-base font-medium text-white transition-all duration-[var(--duration-fast)] ease-[var(--ease-standard)] hover:scale-105 hover:bg-white/10 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E63946]"
+      className="animate-fade-in-up mt-2 rounded-full border border-white/15 bg-white/5 px-8 py-3 text-base font-medium text-white transition-all duration-[var(--duration-fast)] ease-[var(--ease-standard)] hover:scale-105 hover:bg-white/10 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#4CAF3E]"
     >
       Install app
     </button>

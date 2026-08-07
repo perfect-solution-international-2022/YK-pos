@@ -275,7 +275,7 @@ export default function UnitsPage() {
       header: "Name",
       sortValue: (unit) => unit.name,
       render: (unit) => (
-        <span className="font-medium text-secondary dark:text-blue-400">
+        <span className="font-medium text-secondary dark:text-green-400">
           {unit.name}
         </span>
       ),
@@ -310,7 +310,7 @@ export default function UnitsPage() {
       key: "operation_value",
       header: "Operation Value",
       render: (unit) => (
-        <span className="font-medium text-secondary dark:text-blue-400">
+        <span className="font-medium text-secondary dark:text-green-400">
           {unit.operation_value ?? 1}
         </span>
       ),

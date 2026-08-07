@@ -58,7 +58,7 @@ export function FormSection({
           onClick={() => setOpen((current) => !current)}
           className="group flex min-h-14 w-full items-center gap-3 px-4 py-3.5 text-left transition-colors duration-[var(--duration-fast)] ease-[var(--ease-standard)] hover:bg-surface-container-low focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-primary sm:px-5 dark:hover:bg-zinc-800/60"
         >
-          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary transition-transform duration-[var(--duration-base)] ease-[var(--ease-spring)] group-hover:scale-110 dark:bg-blue-500/15 dark:text-blue-400">
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary transition-transform duration-[var(--duration-base)] ease-[var(--ease-spring)] group-hover:scale-110 dark:bg-green-600/15 dark:text-green-400">
             {icon}
           </span>
           <span className="min-w-0 flex-1">

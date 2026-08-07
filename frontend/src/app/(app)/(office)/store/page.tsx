@@ -47,7 +47,7 @@ const ADJUSTMENT_TYPES: { value: StockMovementType; label: string }[] = [
 const INVENTORY_STAT_TINTS = {
   primary: "bg-primary text-on-primary",
   secondary: "bg-secondary text-on-secondary",
-  success: "bg-[#004b1e] text-[#22c55e]",
+  success: "bg-[#0d7a3d] text-[#6ee7a5]",
 } as const;
 
 function InventoryStatTile({

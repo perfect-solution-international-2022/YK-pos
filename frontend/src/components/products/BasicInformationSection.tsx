@@ -38,7 +38,7 @@ function GenerateButton({
     <button
       type="button"
       onClick={onClick}
-      className="inline-flex min-h-6 items-center gap-1 rounded-md px-1.5 text-xs font-semibold text-secondary transition-all duration-[var(--duration-fast)] ease-[var(--ease-standard)] hover:bg-secondary/10 active:scale-95 dark:text-blue-400 dark:hover:bg-blue-500/10"
+      className="inline-flex min-h-6 items-center gap-1 rounded-md px-1.5 text-xs font-semibold text-secondary transition-all duration-[var(--duration-fast)] ease-[var(--ease-standard)] hover:bg-secondary/10 active:scale-95 dark:text-green-400 dark:hover:bg-green-600/10"
     >
       {icon ?? <Sparkles size={12} />}
       {label}
@@ -65,7 +65,7 @@ function SourceToggleIcon({
         packageMode ? "Switch to in-store generated code" : "Switch to on-package code"
       }
       title={packageMode ? "Switch to in-store code" : "Switch to on-package code"}
-      className="pointer-events-auto rounded-md bg-secondary/10 p-1 text-secondary transition-all duration-[var(--duration-fast)] ease-[var(--ease-standard)] hover:bg-secondary/20 active:scale-95 dark:bg-blue-500/10 dark:text-blue-400 dark:hover:bg-blue-500/20"
+      className="pointer-events-auto rounded-md bg-secondary/10 p-1 text-secondary transition-all duration-[var(--duration-fast)] ease-[var(--ease-standard)] hover:bg-secondary/20 active:scale-95 dark:bg-green-600/10 dark:text-green-400 dark:hover:bg-green-600/20"
     >
       {packageMode ? <Sparkles size={15} /> : <ScanLine size={15} />}
     </button>
@@ -138,7 +138,7 @@ function QuickAddCombobox({
         }}
         aria-label={`Add new ${label.toLowerCase()}`}
         title={`Add new ${label.toLowerCase()}`}
-        className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-secondary text-on-secondary transition-all duration-[var(--duration-fast)] ease-[var(--ease-standard)] hover:bg-secondary/90 active:scale-95 dark:bg-blue-500 dark:text-white dark:hover:bg-blue-600"
+        className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-secondary text-on-secondary transition-all duration-[var(--duration-fast)] ease-[var(--ease-standard)] hover:bg-secondary/90 active:scale-95 dark:bg-green-600 dark:text-white dark:hover:bg-green-600"
       >
         <Plus size={18} />
       </button>
@@ -328,7 +328,7 @@ export function BasicInformationSection({
                 onClick={() => setScanning(true)}
                 aria-label="Scan barcode"
                 title="Scan barcode"
-                className="rounded-md bg-secondary/10 p-1 text-secondary transition-all duration-[var(--duration-fast)] ease-[var(--ease-standard)] hover:bg-secondary/20 active:scale-95 dark:bg-blue-500/10 dark:text-blue-400 dark:hover:bg-blue-500/20"
+                className="rounded-md bg-secondary/10 p-1 text-secondary transition-all duration-[var(--duration-fast)] ease-[var(--ease-standard)] hover:bg-secondary/20 active:scale-95 dark:bg-green-600/10 dark:text-green-400 dark:hover:bg-green-600/20"
               >
                 <Barcode size={15} />
               </button>

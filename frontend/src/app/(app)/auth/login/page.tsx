@@ -155,7 +155,7 @@ function LoginForm() {
         {!tillMode && (
           <Link
             href={ROUTES.auth.forgotPassword}
-            className="-mt-1 self-end text-xs font-medium text-primary hover:underline dark:text-blue-400"
+            className="-mt-1 self-end text-xs font-medium text-primary hover:underline dark:text-green-400"
           >
             Forgot password?
           </Link>

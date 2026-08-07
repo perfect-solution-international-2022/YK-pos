@@ -151,7 +151,7 @@ export default function CustomerManagementPage() {
       header: "Name",
       sortValue: (customer) => customer.name,
       render: (customer) => (
-        <span className="font-medium text-secondary dark:text-blue-400">{customer.name}</span>
+        <span className="font-medium text-secondary dark:text-green-400">{customer.name}</span>
       ),
     },
     {
@@ -172,7 +172,7 @@ export default function CustomerManagementPage() {
       header: "Email",
       hideOnMobile: true,
       render: (customer) => (
-        <span className="text-secondary dark:text-blue-400">{customer.email}</span>
+        <span className="text-secondary dark:text-green-400">{customer.email}</span>
       ),
     },
     {
@@ -190,7 +190,7 @@ export default function CustomerManagementPage() {
         customer.credit_limit_cents !== undefined ? (
           money(customer.credit_limit_cents)
         ) : (
-          <span className="font-medium text-secondary dark:text-blue-400">No limit</span>
+          <span className="font-medium text-secondary dark:text-green-400">No limit</span>
         ),
     },
     {

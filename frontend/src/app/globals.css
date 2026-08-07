@@ -8,76 +8,90 @@
   --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
   --font-display: var(--font-geist), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
 
-  /* Velocity Retail theme — src: D:\Download\DESIGN llight 1.md */
-  --color-surface: #f8f9ff;
-  --color-surface-dim: #cbdbf5;
-  --color-surface-bright: #f8f9ff;
+  /* YK Grocery Mart theme — palette sampled from the brand logo:
+     deep forest green (ring/wordmark), leaf green (sprout), and the gold
+     swoosh/"YK" gradient. Green carries brand + primary action; gold is the
+     accent/highlight, never a full-width action surface (it fails contrast
+     against white text at the sizes used here). */
+  --color-surface: #f6faf4;
+  --color-surface-dim: #d3e5cd;
+  --color-surface-bright: #fbfdfa;
   --color-surface-container-lowest: #ffffff;
-  --color-surface-container-low: #eff4ff;
-  --color-surface-container: #e5eeff;
-  --color-surface-container-high: #dce9ff;
-  --color-surface-container-highest: #d3e4fe;
-  --color-on-surface: #0b1c30;
-  --color-on-surface-variant: #444651;
-  --color-inverse-surface: #213145;
-  --color-inverse-on-surface: #eaf1ff;
-  --color-outline: #757682;
-  --color-outline-variant: #c5c5d3;
-  --color-surface-tint: #4059aa;
-  --color-primary: #00236f;
+  --color-surface-container-low: #eff6ec;
+  --color-surface-container: #e7f1e3;
+  --color-surface-container-high: #dcebd7;
+  --color-surface-container-highest: #d1e4cb;
+  --color-on-surface: #12240f;
+  --color-on-surface-variant: #44513f;
+  --color-inverse-surface: #24361f;
+  --color-inverse-on-surface: #edf6e9;
+  --color-outline: #6f7d69;
+  --color-outline-variant: #c2d1bc;
+  --color-surface-tint: #2e7d32;
+  --color-primary: #14591d;
   --color-on-primary: #ffffff;
-  --color-primary-container: #1e3a8a;
-  --color-on-primary-container: #90a8ff;
-  --color-inverse-primary: #b6c4ff;
-  --color-secondary: #0058be;
+  --color-primary-container: #1f7a29;
+  --color-on-primary-container: #a5e0a0;
+  --color-inverse-primary: #8fd88a;
+  --color-secondary: #2e7d32;
   --color-on-secondary: #ffffff;
-  --color-secondary-container: #2170e4;
-  --color-on-secondary-container: #fefcff;
-  --color-tertiary: #003211;
+  --color-secondary-container: #3f9a41;
+  --color-on-secondary-container: #f4fff0;
+  /* Gold from the logo swoosh. Dark ink on gold, not white — #e0a612 with
+     white text is ~2.1:1 and unreadable. */
+  --color-tertiary: #8a6206;
   --color-on-tertiary: #ffffff;
-  --color-tertiary-container: #004b1e;
-  --color-on-tertiary-container: #22c55e;
+  --color-tertiary-container: #f2c230;
+  --color-on-tertiary-container: #3d2c00;
   --color-error: #ba1a1a;
   --color-on-error: #ffffff;
   --color-error-container: #ffdad6;
   --color-on-error-container: #93000a;
-  --color-primary-fixed: #dce1ff;
-  --color-primary-fixed-dim: #b6c4ff;
-  --color-on-primary-fixed: #00164e;
-  --color-on-primary-fixed-variant: #264191;
-  --color-secondary-fixed: #d8e2ff;
-  --color-secondary-fixed-dim: #adc6ff;
-  --color-on-secondary-fixed: #001a42;
-  --color-on-secondary-fixed-variant: #004395;
-  --color-tertiary-fixed: #6bff8f;
-  --color-tertiary-fixed-dim: #4ae176;
-  --color-on-tertiary-fixed: #002109;
-  --color-on-tertiary-fixed-variant: #005321;
-  --color-background: #f8f9ff;
-  --color-on-background: #0b1c30;
-  --color-surface-variant: #d3e4fe;
+  --color-primary-fixed: #c8ecc3;
+  --color-primary-fixed-dim: #8fd88a;
+  --color-on-primary-fixed: #002105;
+  --color-on-primary-fixed-variant: #1f7a29;
+  --color-secondary-fixed: #cfeccb;
+  --color-secondary-fixed-dim: #a8d9a3;
+  --color-on-secondary-fixed: #04220a;
+  --color-on-secondary-fixed-variant: #24631f;
+  --color-tertiary-fixed: #ffe07a;
+  --color-tertiary-fixed-dim: #f2c230;
+  --color-on-tertiary-fixed: #271c00;
+  --color-on-tertiary-fixed-variant: #6b4c00;
+  --color-background: #f6faf4;
+  --color-on-background: #12240f;
+  --color-surface-variant: #d1e4cb;
 
-  /* Midnight Navy — replaces Tailwind's neutral zinc scale with a
-     brand-tinted dark ramp (same navy hue as --color-primary) so every
+  /* Brand accent — the logo's gold, exposed as its own token so highlights
+     (active nav, focus glints, chart series) can reach it without going
+     through the tertiary/on-tertiary contrast pairing. */
+  --color-accent: #e0a612;
+  --color-accent-bright: #f2c230;
+  --color-accent-soft: #ffe07a;
+  --color-on-accent: #3d2c00;
+
+  /* Deep Forest — replaces Tailwind's neutral zinc scale with a
+     brand-tinted dark ramp (same green hue as --color-primary) so every
      existing `dark:*-zinc-*` utility across the app inherits a cohesive
      dark theme instead of generic gray, with no per-component edits. */
-  --color-zinc-50: #f4f6fb;
-  --color-zinc-100: #e7ebf5;
-  --color-zinc-200: #cbd3e6;
-  --color-zinc-300: #aab4cf;
-  --color-zinc-400: #8791ac;
-  --color-zinc-500: #6b7390;
-  --color-zinc-600: #545b76;
-  --color-zinc-700: #2c3350;
-  --color-zinc-800: #1c2138;
-  --color-zinc-900: #12152a;
-  --color-zinc-950: #0a0c1a;
+  --color-zinc-50: #f4faf2;
+  --color-zinc-100: #e6f2e3;
+  --color-zinc-200: #cbdfc6;
+  --color-zinc-300: #a8c6a2;
+  --color-zinc-400: #82a37c;
+  --color-zinc-500: #667f61;
+  --color-zinc-600: #4e6449;
+  --color-zinc-700: #2b3f28;
+  --color-zinc-800: #1a2a18;
+  --color-zinc-900: #101d0f;
+  --color-zinc-950: #081208;
 
   /* Layered, brand-tinted (not pure black) elevation. Premium reads as soft
      and directional; a single flat shadow reads as a default. */
-  --shadow-elevated: 0 1px 2px rgba(11, 28, 55, 0.06), 0 12px 28px -8px rgba(11, 28, 55, 0.16);
-  --shadow-card: 0 1px 2px rgba(11, 28, 55, 0.04), 0 4px 12px -4px rgba(11, 28, 55, 0.08);
-  --shadow-popover: 0 4px 8px rgba(11, 28, 55, 0.08), 0 24px 48px -12px rgba(11, 28, 55, 0.28);
+  --shadow-elevated: 0 1px 2px rgba(18, 36, 15, 0.06), 0 12px 28px -8px rgba(18, 36, 15, 0.16);
+  --shadow-card: 0 1px 2px rgba(18, 36, 15, 0.04), 0 4px 12px -4px rgba(18, 36, 15, 0.08);
+  --shadow-popover: 0 4px 8px rgba(18, 36, 15, 0.08), 0 24px 48px -12px rgba(18, 36, 15, 0.28);
 
   /* Motion tokens. Longer than a stock UI kit so transitions read as deliberate
      rather than snapped-to, but capped: the cashier is still faster than any

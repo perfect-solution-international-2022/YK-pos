@@ -41,12 +41,12 @@ import type { PaymentMethod, StoreSettings } from "@/lib/types";
  * order rather than being assigned an arbitrary colour.
  */
 const CATEGORICAL_DARK = [
-  "#3987e5",
-  "#d95926",
-  "#199e70",
-  "#c98500",
+  "#6cc16f",
+  "#f2c230",
+  "#a8d84f",
+  "#d19a1f",
   "#d55181",
-  "#008300",
+  "#3987e5",
   "#9085e9",
   "#e66767",
 ];
@@ -58,10 +58,10 @@ const PAYMENT_LABELS: Record<PaymentMethod, string> = {
   other: "Other",
 };
 const PAYMENT_COLORS: Record<PaymentMethod, string> = {
-  cash: "#2a78d6",
-  card: "#eb6834",
-  qr: "#1baf7a",
-  other: "#eda100",
+  cash: "#2e7d32",
+  card: "#c98500",
+  qr: "#5c9e2f",
+  other: "#8a6206",
 };
 
 const RANGES: { value: RangePreset; label: string }[] = [
@@ -129,7 +129,7 @@ function ChartCard({
 }>) {
   const toneClasses: Record<typeof badgeTone, string> = {
     violet: "bg-violet-600 text-white dark:bg-violet-500",
-    sky: "bg-sky-600 text-white dark:bg-sky-500",
+    sky: "bg-amber-600 text-white dark:bg-amber-500",
     emerald: "bg-emerald-600 text-white dark:bg-emerald-500",
     orange: "bg-orange-600 text-white dark:bg-orange-500",
   };
@@ -459,7 +459,7 @@ export default function Reports3DPage() {
           label="Orders"
           value={String(data.stats.orders)}
           icon={<Receipt size={20} />}
-          tint="bg-sky-600 text-white dark:bg-sky-500"
+          tint="bg-amber-600 text-white dark:bg-amber-500"
           loading={loading}
           delta={
             previousStats ? percentChange(data.stats.orders, previousStats.orders) : null

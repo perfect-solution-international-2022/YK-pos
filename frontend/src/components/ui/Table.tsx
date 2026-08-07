@@ -55,7 +55,7 @@ export function Table<T>({
                 onClick={onRowClick ? () => onRowClick(row) : undefined}
                 className={`animate-fade-in transition-colors duration-[var(--duration-fast)] ease-[var(--ease-standard)] ${
                   isSelected
-                    ? "bg-primary/10 font-semibold text-primary dark:bg-blue-900/30 dark:text-blue-300"
+                    ? "bg-primary/10 font-semibold text-primary dark:bg-green-900/30 dark:text-green-300"
                     : "text-on-surface hover:bg-surface-container-low dark:text-zinc-50 dark:hover:bg-zinc-800/60"
                 } ${onRowClick ? "cursor-pointer" : ""}`}
               >

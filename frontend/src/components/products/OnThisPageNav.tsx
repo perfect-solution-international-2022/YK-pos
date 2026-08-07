@@ -71,7 +71,7 @@ export function OnThisPageNav({ sections }: Readonly<OnThisPageNavProps>) {
                 aria-current={active ? "true" : undefined}
                 className={`flex min-h-9 items-center gap-2 rounded-lg px-2 py-1.5 text-sm transition-colors duration-[var(--duration-fast)] ease-[var(--ease-standard)] hover:bg-surface-container-low dark:hover:bg-zinc-800/60 ${
                   active
-                    ? "bg-primary/10 font-semibold text-primary dark:bg-blue-500/15 dark:text-blue-400"
+                    ? "bg-primary/10 font-semibold text-primary dark:bg-green-600/15 dark:text-green-400"
                     : "text-on-surface-variant dark:text-zinc-400"
                 }`}
               >

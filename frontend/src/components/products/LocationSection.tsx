@@ -214,7 +214,7 @@ export function LocationSection({
                       onClick={() => setCreatingFor(warehouse)}
                       aria-label={`Add a location in ${warehouse.name}`}
                       title={`Add a location in ${warehouse.name}`}
-                      className="flex h-[42px] w-12 shrink-0 items-center justify-center rounded-lg border border-secondary text-secondary transition-all duration-[var(--duration-fast)] ease-[var(--ease-standard)] hover:bg-secondary/10 active:scale-95 dark:border-blue-500 dark:text-blue-400 dark:hover:bg-blue-500/10"
+                      className="flex h-[42px] w-12 shrink-0 items-center justify-center rounded-lg border border-secondary text-secondary transition-all duration-[var(--duration-fast)] ease-[var(--ease-standard)] hover:bg-secondary/10 active:scale-95 dark:border-green-600 dark:text-green-400 dark:hover:bg-green-600/10"
                     >
                       <Plus size={18} />
                     </button>

@@ -67,10 +67,10 @@ import type { PaymentMethod, PendingOrder } from "@/lib/types";
 import { ROUTES } from "@/lib/types/routes";
 
 /**
- * Series colours follow the dataviz skill's validated 8-hue categorical
- * ramp (see the skill's palette.md). Sales/Purchases and the payment-method
- * breakdown reuse the same entity -> hue mapping across every chart on this
- * page, so "blue" always means the same thing wherever it appears.
+ * Series colours are drawn from the brand palette (logo green + gold).
+ * Sales/Purchases and the payment-method breakdown reuse the same entity ->
+ * hue mapping across every chart on this page, so "green" always means the
+ * same thing wherever it appears.
  */
 interface ChartPalette {
   sales: string;
@@ -88,30 +88,30 @@ interface ChartPalette {
 
 const CHART_COLORS: Record<"light" | "dark", ChartPalette> = {
   light: {
-    sales: "#2a78d6",
-    purchases: "#eb6834",
-    cash: "#2a78d6",
-    card: "#eb6834",
-    qr: "#1baf7a",
-    other: "#eda100",
-    donutOther: "#898781",
-    grid: "#e1e0d9",
-    ink: "#52514e",
-    muted: "#898781",
-    surface: "#fcfcfb",
+    sales: "#2e7d32",
+    purchases: "#c98500",
+    cash: "#2e7d32",
+    card: "#c98500",
+    qr: "#5c9e2f",
+    other: "#8a6206",
+    donutOther: "#8b9187",
+    grid: "#dee7da",
+    ink: "#44513f",
+    muted: "#8b9187",
+    surface: "#fbfdfa",
   },
   dark: {
-    sales: "#3987e5",
-    purchases: "#d95926",
-    cash: "#3987e5",
-    card: "#d95926",
-    qr: "#199e70",
-    other: "#c98500",
-    donutOther: "#898781",
-    grid: "#2c2c2a",
-    ink: "#c3c2b7",
-    muted: "#898781",
-    surface: "#1a1a19",
+    sales: "#6cc16f",
+    purchases: "#f2c230",
+    cash: "#6cc16f",
+    card: "#f2c230",
+    qr: "#a8d84f",
+    other: "#d19a1f",
+    donutOther: "#82a37c",
+    grid: "#2b3f28",
+    ink: "#cbdfc6",
+    muted: "#82a37c",
+    surface: "#101d0f",
   },
 };
 
@@ -191,7 +191,7 @@ const KPI_TINTS = {
   emerald: "bg-emerald-500 text-white dark:bg-emerald-500",
   amber: "bg-amber-500 text-white dark:bg-amber-500",
   rose: "bg-rose-500 text-white dark:bg-rose-500",
-  sky: "bg-sky-500 text-white dark:bg-sky-500",
+  sky: "bg-amber-500 text-white dark:bg-amber-500",
   orange: "bg-orange-500 text-white dark:bg-orange-500",
 } as const;
 
@@ -527,7 +527,7 @@ function StockValueCard({
       </h3>
       <ul className="flex flex-col gap-4">
         <li className="flex items-center gap-3">
-          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-sky-600 text-white dark:bg-sky-500">
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-amber-600 text-white dark:bg-amber-500">
             <DollarSign size={18} />
           </span>
           <span className="flex-1">
@@ -650,7 +650,7 @@ function StockAlertTable({ rows }: Readonly<{ rows: StockAlertRow[] }>) {
         action={
           <Link
             href={ROUTES.inventory.alerts}
-            className="flex items-center gap-0.5 text-xs font-medium text-primary hover:underline dark:text-blue-400 transition-colors duration-[var(--duration-fast)]"
+            className="flex items-center gap-0.5 text-xs font-medium text-primary hover:underline dark:text-green-400 transition-colors duration-[var(--duration-fast)]"
           >
             View all
             <ChevronRight size={13} aria-hidden />
@@ -736,7 +736,7 @@ function RecentSalesTable({
       render: (row) => (
         <Link
           href={ROUTES.sales.detail(row.client_generated_id)}
-          className="font-medium text-primary hover:underline dark:text-blue-400 transition-colors duration-[var(--duration-fast)]"
+          className="font-medium text-primary hover:underline dark:text-green-400 transition-colors duration-[var(--duration-fast)]"
         >
           {row.receipt_no ?? row.client_generated_id.slice(0, 8)}
         </Link>
@@ -783,7 +783,7 @@ function RecentSalesTable({
         action={
           <Link
             href={ROUTES.sales.root}
-            className="flex items-center gap-0.5 text-xs font-medium text-primary hover:underline dark:text-blue-400 transition-colors duration-[var(--duration-fast)]"
+            className="flex items-center gap-0.5 text-xs font-medium text-primary hover:underline dark:text-green-400 transition-colors duration-[var(--duration-fast)]"
           >
             View all
             <ChevronRight size={13} aria-hidden />
@@ -822,10 +822,10 @@ const INSIGHT_ICON = {
 };
 
 const INSIGHT_CLASSES = {
-  up: "bg-[#004b1e] text-[#4ade80] dark:bg-green-900/40",
+  up: "bg-[#0d7a3d] text-[#4ade80] dark:bg-green-900/40",
   down: "bg-error/15 text-error dark:bg-red-900/40 dark:text-red-400",
   warning: "bg-amber-500/15 text-amber-600 dark:bg-amber-900/40 dark:text-amber-400",
-  neutral: "bg-sky-500/15 text-sky-600 dark:bg-sky-900/40 dark:text-sky-400",
+  neutral: "bg-amber-500/15 text-amber-600 dark:bg-amber-900/40 dark:text-amber-400",
 };
 
 function InsightsCard({ insights }: Readonly<{ insights: DashboardInsight[] }>) {

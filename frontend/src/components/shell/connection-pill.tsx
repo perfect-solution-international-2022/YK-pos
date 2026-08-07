@@ -9,7 +9,7 @@ export function ConnectionPill() {
     <span
       className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-bold transition-colors duration-[var(--duration-base)] ease-[var(--ease-standard)] ${
         online
-          ? "bg-[#004b1e] text-[#bbf7d0] dark:bg-green-900/50 dark:text-green-300"
+          ? "bg-[#0d7a3d] text-[#bbf7d0] dark:bg-green-900/50 dark:text-green-300"
           : "bg-error text-on-error dark:bg-red-900/50 dark:text-red-300"
       }`}
     >

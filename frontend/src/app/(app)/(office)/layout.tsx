@@ -212,7 +212,7 @@ function NavItemLink({
   const Icon = item.icon;
   const isChild = depth > 0;
   const activeClasses = isChild
-    ? "bg-surface-container font-medium text-primary dark:bg-zinc-800 dark:text-blue-400"
+    ? "bg-surface-container font-medium text-primary dark:bg-zinc-800 dark:text-green-400"
     : "bg-gradient-to-r from-primary to-secondary text-on-primary shadow-sm";
   const inactiveClasses =
     "text-on-surface-variant hover:translate-x-0.5 hover:bg-surface-container hover:text-on-surface dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100";

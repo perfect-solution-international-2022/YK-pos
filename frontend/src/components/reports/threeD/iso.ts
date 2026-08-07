@@ -27,8 +27,12 @@ export const MIN_PITCH = 0.14;
 export const MAX_PITCH = 1.35;
 export const DEFAULT_PITCH = 0.58;
 
-/** Perceptual sequential ramp (viridis stops) for value-coloured scenes. */
-export const SEQUENTIAL_RAMP = ["#3b0f70", "#3b528b", "#21918c", "#5ec962", "#fde725"];
+/**
+ * Sequential ramp for value-coloured scenes, dark forest green -> brand gold.
+ * Stops keep a monotonic lightness climb (roughly 15% -> 90%) so the ramp still
+ * encodes magnitude by brightness alone and survives greyscale printing.
+ */
+export const SEQUENTIAL_RAMP = ["#0b2e12", "#14591d", "#3f9a41", "#a8d84f", "#ffe07a"];
 
 export function rotateY(point: Vec3, theta: number): Vec3 {
   const cos = Math.cos(theta);

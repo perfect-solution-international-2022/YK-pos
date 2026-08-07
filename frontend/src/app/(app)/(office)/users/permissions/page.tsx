@@ -144,7 +144,7 @@ export default function GroupPermissionsPage() {
       header: "Description",
       sortValue: (role) => role.description ?? "",
       render: (role) => (
-        <span className="text-primary dark:text-blue-400">
+        <span className="text-primary dark:text-green-400">
           {role.description || `${role.name} Permissions`}
         </span>
       ),

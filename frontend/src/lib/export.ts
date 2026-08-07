@@ -109,11 +109,11 @@ export function exportPdf<T>(
 
   printWindow.document.write(
     `<html><head><title>${escapeHtml(title)}</title><style>
-      body{font-family:ui-sans-serif,system-ui,sans-serif;padding:24px;color:#111}
-      caption{text-align:left;font-size:18px;font-weight:600;margin-bottom:12px}
+      body{font-family:ui-sans-serif,system-ui,sans-serif;padding:24px;color:#12240f}
+      caption{text-align:left;font-size:18px;font-weight:600;margin-bottom:12px;color:#14591d}
       table{border-collapse:collapse;width:100%}
-      th,td{border-bottom:1px solid #ddd;padding:8px;font-size:12px;text-align:left}
-      th{background:#f4f4f5;font-weight:600}
+      th,td{border-bottom:1px solid #c2d1bc;padding:8px;font-size:12px;text-align:left}
+      th{background:#e7f1e3;color:#14591d;font-weight:600}
       @media print{@page{margin:14mm}}
     </style></head><body>${buildHtmlTable(title, rows, columns)}</body></html>`,
   );

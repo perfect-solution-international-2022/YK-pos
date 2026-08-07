@@ -121,7 +121,7 @@ export function ImageDropzone({
         onDrop={handleDrop}
         className={`rounded-2xl border-2 border-dashed p-6 text-center transition-all duration-[var(--duration-base)] ease-[var(--ease-standard)] ${
           dragging
-            ? "scale-[1.01] border-secondary bg-secondary/5 dark:border-blue-400 dark:bg-blue-500/10"
+            ? "scale-[1.01] border-secondary bg-secondary/5 dark:border-green-400 dark:bg-green-600/10"
             : "border-outline-variant bg-surface-container-low/60 dark:border-zinc-700 dark:bg-zinc-900/60"
         } ${error ? "border-error" : ""}`}
       >
@@ -184,7 +184,7 @@ export function ImageDropzone({
                 className="object-cover transition-transform duration-[var(--duration-slow)] ease-[var(--ease-standard)] group-hover:scale-105"
               />
               {index === 0 && (
-                <span className="absolute left-1.5 top-1.5 rounded-full bg-secondary px-2 py-0.5 text-[10px] font-semibold text-on-secondary dark:bg-blue-500 dark:text-white">
+                <span className="absolute left-1.5 top-1.5 rounded-full bg-secondary px-2 py-0.5 text-[10px] font-semibold text-on-secondary dark:bg-green-600 dark:text-white">
                   Primary
                 </span>
               )}

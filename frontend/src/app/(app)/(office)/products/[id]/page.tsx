@@ -265,7 +265,7 @@ export default function ProductDetailsPage({
     {
       label: "Cost",
       value: money(product.cost_cents ?? 0),
-      valueClassName: "text-indigo-600 dark:text-indigo-400",
+      valueClassName: "text-green-700 dark:text-green-400",
     },
     {
       label: "Price",
@@ -304,15 +304,15 @@ export default function ProductDetailsPage({
     });
 
     const summaryTiles = [
-      { label: "Cost", value: money(currentProduct.cost_cents ?? 0), color: "#6366f1" },
-      { label: "Price", value: money(currentProduct.price_cents), color: "#10b981" },
+      { label: "Cost", value: money(currentProduct.cost_cents ?? 0), color: "#14591d" },
+      { label: "Price", value: money(currentProduct.price_cents), color: "#2e7d32" },
       {
         label: "Wholesale price",
         value: money(currentProduct.wholesale_price_cents ?? 0),
         color: "#f59e0b",
       },
       { label: "Minprice", value: money(currentProduct.min_price_cents ?? 0), color: "#ef4444" },
-      { label: "Stock alert", value: stockAlert.toFixed(2), color: "#0ea5e9" },
+      { label: "Stock alert", value: stockAlert.toFixed(2), color: "#c98500" },
     ]
       .map(
         (tile) => `
@@ -359,7 +359,7 @@ export default function ProductDetailsPage({
           <span>${escapeHtml(currentProduct.name)} — ${escapeHtml(currentProduct.barcode)}</span>
         </div>
 
-        <div style="display:flex;gap:16px;align-items:center;justify-content:space-between;border-radius:16px;padding:18px;background:linear-gradient(90deg,#00236f,#0058be);color:#fff">
+        <div style="display:flex;gap:16px;align-items:center;justify-content:space-between;border-radius:16px;padding:18px;background:linear-gradient(90deg,#14591d,#2e7d32);color:#fff">
           <div style="display:flex;gap:14px;align-items:center">
             <div style="height:80px;width:80px;flex-shrink:0;border-radius:12px;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden">
               ${gallery[0] ? `<img src="${gallery[0]}" style="height:100%;width:100%;object-fit:contain"/>` : ""}
@@ -367,7 +367,7 @@ export default function ProductDetailsPage({
             <div>
               <div style="display:flex;gap:6px;margin-bottom:6px">
                 <span style="background:rgba(255,255,255,.2);border-radius:999px;padding:3px 10px;font-size:11px;font-weight:600">${escapeHtml(typeLabel)}</span>
-                <span style="background:#10b981;border-radius:999px;padding:3px 10px;font-size:11px;font-weight:600">${escapeHtml(currentProduct.barcode)}</span>
+                <span style="background:#2e7d32;border-radius:999px;padding:3px 10px;font-size:11px;font-weight:600">${escapeHtml(currentProduct.barcode)}</span>
               </div>
               <div style="font-size:20px;font-weight:700">${escapeHtml(currentProduct.name)}</div>
               <div style="display:flex;gap:12px;font-size:12px;margin-top:6px;color:rgba(255,255,255,.9)">
@@ -483,8 +483,8 @@ export default function ProductDetailsPage({
         <SummaryTile
           label="Cost"
           value={money(product.cost_cents ?? 0)}
-          icon={<Wallet size={18} className="text-indigo-600 dark:text-indigo-400" />}
-          accent="border-l-indigo-500"
+          icon={<Wallet size={18} className="text-green-700 dark:text-green-400" />}
+          accent="border-l-green-700"
         />
         <SummaryTile
           label="Price"
@@ -507,8 +507,8 @@ export default function ProductDetailsPage({
         <SummaryTile
           label="Stock alert"
           value={stockAlert.toFixed(2)}
-          icon={<Bell size={18} className="text-sky-600 dark:text-sky-400" />}
-          accent="border-l-sky-500"
+          icon={<Bell size={18} className="text-amber-600 dark:text-amber-400" />}
+          accent="border-l-amber-500"
         />
       </section>
 
@@ -554,7 +554,7 @@ export default function ProductDetailsPage({
               }
               valueClassName={
                 product.warranty
-                  ? "rounded-full bg-sky-100 px-3 py-1 text-sky-700 dark:bg-sky-900/40 dark:text-sky-300"
+                  ? "rounded-full bg-amber-100 px-3 py-1 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300"
                   : "text-on-surface-variant dark:text-zinc-400"
               }
             />
@@ -574,7 +574,7 @@ export default function ProductDetailsPage({
                 <Database size={16} aria-hidden />
                 Warehouse Stock
               </h3>
-              <span className="rounded-full bg-sky-500 px-3 py-1 text-xs font-semibold text-white">
+              <span className="rounded-full bg-amber-500 px-3 py-1 text-xs font-semibold text-white">
                 Total: {product.stock_quantity.toFixed(2)} {unit}
               </span>
             </div>
@@ -582,9 +582,9 @@ export default function ProductDetailsPage({
               {stockLines.map((line) => (
                 <div
                   key={line.id}
-                  className="flex items-center gap-3 rounded-xl border border-sky-100 bg-sky-50 px-4 py-3 dark:border-sky-900/50 dark:bg-sky-950/30"
+                  className="flex items-center gap-3 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 dark:border-amber-900/50 dark:bg-amber-950/30"
                 >
-                  <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-sky-500 text-white">
+                  <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-500 text-white">
                     <WarehouseIcon size={18} aria-hidden />
                   </span>
                   <span>

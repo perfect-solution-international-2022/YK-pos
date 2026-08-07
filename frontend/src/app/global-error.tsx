@@ -26,12 +26,12 @@ export default function GlobalError({
         <h1 style={{ fontSize: "20px", fontWeight: 600 }}>
           The application failed to start
         </h1>
-        <p style={{ fontSize: "14px", color: "#52525b", maxWidth: "28rem" }}>
+        <p style={{ fontSize: "14px", color: "#4e6449", maxWidth: "28rem" }}>
           Reload the page to try again. Sales saved on this device are stored in
           local storage and are not affected.
         </p>
         {error.digest && (
-          <p style={{ fontSize: "12px", color: "#71717a" }}>
+          <p style={{ fontSize: "12px", color: "#667f61" }}>
             Reference: {error.digest}
           </p>
         )}
@@ -43,7 +43,7 @@ export default function GlobalError({
             padding: "0 20px",
             borderRadius: "8px",
             border: "none",
-            background: "#0058be",
+            background: "#14591d",
             color: "#fff",
             fontSize: "14px",
             cursor: "pointer",

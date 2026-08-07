@@ -55,7 +55,7 @@ function ToggleOption({
         type="checkbox"
         checked={checked}
         onChange={(event) => onChange(event.target.checked)}
-        className="h-4 w-4 cursor-pointer rounded border-outline-variant accent-secondary dark:border-zinc-700 dark:accent-blue-500"
+        className="h-4 w-4 cursor-pointer rounded border-outline-variant accent-secondary dark:border-zinc-700 dark:accent-green-600"
       />
       <span className="text-sm font-medium text-on-surface dark:text-zinc-100">
         {label}
@@ -222,7 +222,7 @@ export default function PrintLabelsPage() {
             onClick={() => setScanning(true)}
             aria-label="Scan barcode"
             title="Scan barcode"
-            className="flex min-h-11 w-12 shrink-0 items-center justify-center bg-secondary text-on-secondary transition-colors hover:bg-secondary/90 dark:bg-blue-500 dark:text-white dark:hover:bg-blue-500/90"
+            className="flex min-h-11 w-12 shrink-0 items-center justify-center bg-secondary text-on-secondary transition-colors hover:bg-secondary/90 dark:bg-green-600 dark:text-white dark:hover:bg-green-600/90"
           >
             <QrCode size={18} aria-hidden />
           </button>

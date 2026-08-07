@@ -60,7 +60,7 @@ export function Switch({
           checked={checked}
           disabled={disabled}
           onChange={(event) => onChange(event.target.checked)}
-          className="peer h-7 w-12 cursor-pointer appearance-none rounded-full bg-surface-container-highest outline-none transition-colors duration-[var(--duration-base)] ease-[var(--ease-standard)] checked:bg-secondary disabled:cursor-not-allowed dark:bg-zinc-700 dark:checked:bg-blue-500"
+          className="peer h-7 w-12 cursor-pointer appearance-none rounded-full bg-surface-container-highest outline-none transition-colors duration-[var(--duration-base)] ease-[var(--ease-standard)] checked:bg-secondary disabled:cursor-not-allowed dark:bg-zinc-700 dark:checked:bg-green-600"
         />
         <span
           aria-hidden

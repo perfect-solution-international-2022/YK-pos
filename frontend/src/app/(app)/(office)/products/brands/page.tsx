@@ -289,7 +289,7 @@ export default function BrandsPage() {
       header: "Brand Name",
       sortValue: (brand) => brand.name,
       render: (brand) => (
-        <span className="font-medium text-secondary dark:text-blue-400">
+        <span className="font-medium text-secondary dark:text-green-400">
           {brand.name}
         </span>
       ),
