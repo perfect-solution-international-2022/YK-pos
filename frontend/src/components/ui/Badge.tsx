@@ -14,10 +14,10 @@ const VARIANT_CLASSES: Record<BadgeVariant, string> = {
 export function Badge({
   variant = "neutral",
   children,
-}: {
+}: Readonly<{
   variant?: BadgeVariant;
   children: ReactNode;
-}) {
+}>) {
   return (
     <span
       className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium transition-colors duration-[var(--duration-fast)] ease-[var(--ease-standard)] ${VARIANT_CLASSES[variant]}`}
