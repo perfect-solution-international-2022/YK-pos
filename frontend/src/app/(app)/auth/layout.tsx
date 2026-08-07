@@ -1,14 +1,5 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { ROUTES } from "@/lib/types/routes";
-
-const TABS = [
-  { href: ROUTES.auth.login, label: "Login" },
-  { href: ROUTES.auth.register, label: "Register" },
-];
-
 const TEAM = [
   { initials: "AL", tint: "bg-secondary-container" },
   { initials: "JS", tint: "bg-tertiary-container" },
@@ -29,8 +20,6 @@ const WEEK = [
 export default function AuthLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  const pathname = usePathname();
-
   return (
     <main className="relative flex flex-1 items-center justify-center overflow-hidden bg-surface p-4 sm:p-8 dark:bg-black">
       <div
@@ -44,27 +33,7 @@ export default function AuthLayout({
 
       <div className="relative grid w-full max-w-4xl overflow-hidden rounded-3xl border border-outline-variant/60 bg-surface-container-lowest shadow-elevated md:grid-cols-2 dark:border-zinc-800 dark:bg-zinc-950">
         {/* form panel (left) */}
-        <section className="flex flex-col gap-8 p-8 sm:p-10">
-          <nav className="flex rounded-full bg-surface-container p-1 text-sm dark:bg-zinc-900">
-            {TABS.map((tab) => {
-              const active = pathname?.startsWith(tab.href);
-              const activeClass = active
-                ? "bg-surface-container-lowest text-primary shadow-elevated dark:bg-zinc-800 dark:text-white"
-                : "text-on-surface-variant hover:text-on-surface dark:text-zinc-400 dark:hover:text-zinc-200";
-              return (
-                <Link
-                  key={tab.href}
-                  href={tab.href}
-                  className={`flex-1 rounded-full px-4 py-2 text-center font-medium transition-all ${activeClass}`}
-                >
-                  {tab.label}
-                </Link>
-              );
-            })}
-          </nav>
-
-          {children}
-        </section>
+        <section className="flex flex-col gap-8 p-8 sm:p-10">{children}</section>
 
         {/* visual panel (right) */}
         <aside className="relative hidden overflow-hidden bg-gradient-to-br from-primary to-secondary p-8 text-on-primary md:block">
