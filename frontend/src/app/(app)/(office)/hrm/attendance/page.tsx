@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
 import Image from "next/image";
 import {
   ChevronLeft,
@@ -41,7 +41,7 @@ import { exportExcel, exportPdf, type ExportColumn } from "@/lib/export";
 import { Card, PageHeader } from "@/components/ui/PageHeader";
 import { Select } from "@/components/ui/Select";
 import { useToast } from "@/components/ui/Toast";
-import { ManualAttendanceModal } from "./components/ManualAttendanceModal";
+import { ManualAttendanceModal } from "@/components/ui/ManualAttendanceModal";
 import { ROUTES } from "@/lib/types/routes";
 
 type View = "daily" | "calendar" | "report";
@@ -234,30 +234,36 @@ function DailyView({ employees, designations, shifts }: Readonly<SharedData>) {
       render: (employee) => {
         const record = recordByEmployee.get(employee.id);
         const onLeave = onLeaveIds.has(employee.id);
+        let clockAction: ReactNode = null;
+        if (!record?.clock_in) {
+          clockAction = (
+            <Button
+              type="button"
+              size="sm"
+              variant="outline"
+              disabled={onLeave}
+              onClick={() => void handleClockIn(employee)}
+            >
+              <LogIn size={13} />
+              In
+            </Button>
+          );
+        } else if (!record.clock_out) {
+          clockAction = (
+            <Button
+              type="button"
+              size="sm"
+              variant="outline"
+              onClick={() => void handleClockOut(employee)}
+            >
+              <LogOut size={13} />
+              Out
+            </Button>
+          );
+        }
         return (
           <span className="flex items-center justify-end gap-1.5">
-            {!record?.clock_in ? (
-              <Button
-                type="button"
-                size="sm"
-                variant="outline"
-                disabled={onLeave}
-                onClick={() => void handleClockIn(employee)}
-              >
-                <LogIn size={13} />
-                In
-              </Button>
-            ) : !record.clock_out ? (
-              <Button
-                type="button"
-                size="sm"
-                variant="outline"
-                onClick={() => void handleClockOut(employee)}
-              >
-                <LogOut size={13} />
-                Out
-              </Button>
-            ) : null}
+            {clockAction}
             <button
               type="button"
               aria-label={`Edit ${employee.full_name}'s attendance`}
