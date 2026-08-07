@@ -76,4 +76,23 @@ export const ROUTES = {
     root: "/settings",
     hardware: "/settings/hardware",
   },
+  hrm: {
+    dashboard: "/hrm",
+    employees: {
+      root: "/hrm/employees",
+      new: "/hrm/employees/new",
+      detail: (id: string) => `/hrm/employees/${id}`,
+      edit: (id: string) => `/hrm/employees/${id}/edit`,
+    },
+    designations: "/hrm/designations",
+    shifts: "/hrm/shifts",
+    attendance: "/hrm/attendance",
+    leave: "/hrm/leave",
+    payroll: "/hrm/payroll",
+    performance: "/hrm/performance",
+    announcements: "/hrm/announcements",
+    reports: "/hrm/reports",
+    auditLogs: "/hrm/audit-logs",
+    settings: "/hrm/settings",
+  },
 } as const;

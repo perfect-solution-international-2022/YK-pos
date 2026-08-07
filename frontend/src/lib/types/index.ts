@@ -390,6 +390,74 @@ export interface Supplier {
   total_purchase_return_due_cents: number;
 }
 
+export type EmployeeGender = "male" | "female" | "other";
+export type EmploymentType = "full_time" | "part_time" | "contract" | "intern";
+
+export interface EmployeeDocument {
+  name: string;
+  data_url: string;
+  size: number;
+}
+
+export interface Employee {
+  id: string;
+  /** Auto-generated, sequential — same pattern as `Supplier.code`. */
+  employee_code: string;
+  full_name: string;
+  nic: string;
+  /** ISO date (yyyy-mm-dd), from a native `<input type="date">`. */
+  date_of_birth: string;
+  gender: EmployeeGender;
+  phone: string;
+  email?: string;
+  address?: string;
+  emergency_contact_name?: string;
+  emergency_contact_phone?: string;
+
+  designation_id: string;
+  joining_date: string;
+  employment_type: EmploymentType;
+  shift_id: string;
+
+  basic_salary_cents: number;
+  bank_name?: string;
+  bank_account_no?: string;
+  bank_branch?: string;
+
+  /** Set only when this employee also has a till/back-office login. */
+  staff_user_id?: string;
+
+  /** Data URL, same as every other image in this local-first app. */
+  photo?: string;
+  documents: EmployeeDocument[];
+
+  active: boolean;
+  created_at: number;
+}
+
+export interface Designation {
+  id: string;
+  name: string;
+  description?: string;
+  active: boolean;
+  created_at: number;
+}
+
+export interface Shift {
+  id: string;
+  name: string;
+  /** "HH:mm" */
+  start_time: string;
+  /** "HH:mm" */
+  end_time: string;
+  break_minutes: number;
+  grace_minutes: number;
+  /** 0 (Sun) – 6 (Sat) */
+  weekly_off: number[];
+  active: boolean;
+  created_at: number;
+}
+
 export interface Customer {
   id: string;
   code: string;
@@ -586,6 +654,8 @@ export const PERMISSIONS = [
   "reports.view",
   "settings.manage",
   "users.manage",
+  "hrm.view",
+  "hrm.manage",
 ] as const;
 
 export type Permission = (typeof PERMISSIONS)[number];

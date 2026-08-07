@@ -9,7 +9,9 @@ import type {
   Category,
   Customer,
   DeletedProductRecord,
+  Designation,
   Discount,
+  Employee,
   HeldCart,
   PaymentMethod,
   PaymentSplit,
@@ -19,6 +21,7 @@ import type {
   PurchaseOrder,
   PurchaseReturn,
   Role,
+  Shift,
   StaffUser,
   StockMovement,
   Supplier,
@@ -58,6 +61,9 @@ export class PosDB extends Dexie {
   categories!: Table<Category, string>;
   brands!: Table<Brand, string>;
   customers!: Table<Customer, string>;
+  employees!: Table<Employee, string>;
+  designations!: Table<Designation, string>;
+  shifts!: Table<Shift, string>;
 
   constructor() {
     super("posDB");
@@ -188,6 +194,14 @@ export class PosDB extends Dexie {
      */
     this.version(10).stores({
       brands: "id, name",
+    });
+    /**
+     * v11: HR Management module — employees, designations, shifts.
+     */
+    this.version(11).stores({
+      employees: "id, employee_code, designation_id, shift_id",
+      designations: "id, name",
+      shifts: "id, name",
     });
   }
 }
@@ -1040,3 +1054,6 @@ export * from "./notifications";
 export * from "./settings";
 export * from "./reports";
 export * from "./reports-3d";
+export * from "./designations";
+export * from "./shifts";
+export * from "./employees";

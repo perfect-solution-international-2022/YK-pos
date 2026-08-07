@@ -16,6 +16,7 @@ const MODULE_LABELS: Record<string, string> = {
   reports: "Reports",
   settings: "Settings",
   users: "Users management",
+  hrm: "HR Management",
 };
 
 const ACTION_LABELS: Record<string, string> = {
@@ -41,6 +42,8 @@ const ACTION_HINTS: Record<string, string> = {
   "reports.view": "Open the reports screens",
   "settings.manage": "Change business and hardware settings",
   "users.manage": "Add users and edit group permissions",
+  "hrm.view": "See employees, attendance, leave and payroll",
+  "hrm.manage": "Add, edit and remove HR records",
 };
 
 function moduleOf(permission: string): string {

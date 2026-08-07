@@ -37,6 +37,8 @@ const OFFICE_PERMISSIONS: Permission[] = [
   "reports.view",
   "settings.manage",
   "users.manage",
+  "hrm.view",
+  "hrm.manage",
 ];
 
 export function isPosOnly(permissions: Permission[]): boolean {
