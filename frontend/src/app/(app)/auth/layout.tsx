@@ -2,29 +2,6 @@
 
 import Image from "next/image";
 
-const FEATURES = [
-  "Real-time inventory tracking",
-  "Multi-location POS support",
-  "Advanced reporting & analytics",
-];
-
-function CheckIcon() {
-  return (
-    <svg
-      aria-hidden
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className="h-3 w-3"
-    >
-      <path d="M20 6 9 17l-5-5" />
-    </svg>
-  );
-}
-
 export default function AuthLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
