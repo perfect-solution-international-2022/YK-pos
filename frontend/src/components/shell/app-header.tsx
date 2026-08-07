@@ -45,6 +45,7 @@ const OFFICE_SIDEBAR_PATHS = [
   ROUTES.users.root,
   ROUTES.settings.root,
   ROUTES.profile,
+  ROUTES.hrm.dashboard,
 ];
 
 function formatTime(date: Date): string {
@@ -209,7 +210,7 @@ export function AppHeader() {
         <button
           type="button"
           onClick={openCommandPalette}
-          className="group ml-2 hidden min-w-0 max-w-xs flex-1 items-center gap-2 rounded-xl border border-outline-variant px-3 py-1.5 text-xs text-on-surface-variant transition-colors duration-[var(--duration-fast)] ease-[var(--ease-standard)] hover:border-primary/40 hover:bg-surface-container focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary lg:flex dark:border-zinc-800 dark:text-zinc-500 dark:hover:bg-zinc-800"
+          className="group ml-2 hidden h-9 min-w-0 max-w-xs flex-1 items-center gap-2 rounded-xl border border-outline-variant px-3 text-xs text-on-surface-variant transition-colors duration-[var(--duration-fast)] ease-[var(--ease-standard)] hover:border-primary/40 hover:bg-surface-container focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary lg:flex dark:border-zinc-800 dark:text-zinc-500 dark:hover:bg-zinc-800"
         >
           <Search
             size={13}
