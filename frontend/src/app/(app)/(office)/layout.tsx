@@ -19,16 +19,22 @@ import {
   Box,
   Boxes,
   Briefcase,
+  CalendarClock,
+  CalendarDays,
   ChevronDown,
+  ClipboardList,
   Contact,
   Copy,
   CreditCard,
   DollarSign,
   FilePlus,
   Files,
+  FileClock,
   Folder,
+  History,
   KeyRound,
   LayoutDashboard,
+  Megaphone,
   Monitor,
   PackagePlus,
   Quote,
@@ -38,11 +44,14 @@ import {
   ShieldCheck,
   ShoppingBag,
   ShoppingCart,
+  Star,
   Store,
   Tag,
   Truck,
   UserCog,
   Users,
+  UsersRound,
+  Wallet,
   XCircle,
 } from "lucide-react";
 
@@ -168,6 +177,25 @@ const NAV_GROUPS: NavGroup[] = [
         ],
       },
       { href: ROUTES.settings.root, label: "Settings", icon: Settings },
+      {
+        href: ROUTES.hrm.dashboard,
+        label: "HRM",
+        icon: UsersRound,
+        children: [
+          { href: ROUTES.hrm.dashboard, label: "Dashboard", icon: LayoutDashboard },
+          { href: ROUTES.hrm.employees.root, label: "Employees", icon: Users },
+          { href: ROUTES.hrm.designations, label: "Designations", icon: Briefcase },
+          { href: ROUTES.hrm.shifts, label: "Shift Management", icon: CalendarClock },
+          { href: ROUTES.hrm.attendance, label: "Attendance", icon: ClipboardList },
+          { href: ROUTES.hrm.leave, label: "Leave Management", icon: CalendarDays },
+          { href: ROUTES.hrm.payroll, label: "Payroll", icon: Wallet },
+          { href: ROUTES.hrm.performance, label: "Performance", icon: Star },
+          { href: ROUTES.hrm.announcements, label: "Announcements", icon: Megaphone },
+          { href: ROUTES.hrm.reports, label: "Reports", icon: FileClock },
+          { href: ROUTES.hrm.auditLogs, label: "Audit Logs", icon: History },
+          { href: ROUTES.hrm.settings, label: "Settings", icon: Settings },
+        ],
+      },
     ],
   },
 ];
@@ -438,7 +466,8 @@ export default function OfficeLayout({
             className={`animate-fade-in-up mx-auto ${
               pathname === ROUTES.products ||
               pathname === ROUTES.people.root ||
-              pathname === ROUTES.suppliers
+              pathname === ROUTES.suppliers ||
+              pathname === ROUTES.hrm.employees.root
                 ? "max-w-full py-4 sm:py-6"
                 : "max-w-6xl p-4 sm:p-6"
             }`}

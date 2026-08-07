@@ -1,7 +1,10 @@
 import Dexie, { type Table } from "dexie";
 import { computeCartTotal } from "@/lib/cart-math";
 import type {
+  Announcement,
   AppNotification,
+  AttendanceRecord,
+  AuditLogEntry,
   Brand,
   CartItem,
   CartTotal,
@@ -9,16 +12,23 @@ import type {
   Category,
   Customer,
   DeletedProductRecord,
+  Designation,
   Discount,
+  Employee,
   HeldCart,
+  LeaveRequest,
+  LeaveType,
   PaymentMethod,
   PaymentSplit,
   PendingOrder,
+  PerformanceReview,
+  Payslip,
   Product,
   ProductUnitRecord,
   PurchaseOrder,
   PurchaseReturn,
   Role,
+  Shift,
   StaffUser,
   StockMovement,
   Supplier,
@@ -58,6 +68,16 @@ export class PosDB extends Dexie {
   categories!: Table<Category, string>;
   brands!: Table<Brand, string>;
   customers!: Table<Customer, string>;
+  employees!: Table<Employee, string>;
+  designations!: Table<Designation, string>;
+  shifts!: Table<Shift, string>;
+  attendance!: Table<AttendanceRecord, string>;
+  leaveTypes!: Table<LeaveType, string>;
+  leaveRequests!: Table<LeaveRequest, string>;
+  payslips!: Table<Payslip, string>;
+  performanceReviews!: Table<PerformanceReview, string>;
+  announcements!: Table<Announcement, string>;
+  auditLogs!: Table<AuditLogEntry, string>;
 
   constructor() {
     super("posDB");
@@ -188,6 +208,41 @@ export class PosDB extends Dexie {
      */
     this.version(10).stores({
       brands: "id, name",
+    });
+    /**
+     * v11: HR Management module — employees, designations, shifts.
+     */
+    this.version(11).stores({
+      employees: "id, employee_code, designation_id, shift_id",
+      designations: "id, name",
+      shifts: "id, name",
+    });
+    /**
+     * v12: HR Management module — attendance and leave.
+     */
+    this.version(12).stores({
+      attendance: "id, date, employee_id, [employee_id+date]",
+      leaveTypes: "id, name",
+      leaveRequests: "id, employee_id, status, requested_at, [employee_id+status]",
+    });
+    /**
+     * v13: HR Management module — payroll.
+     */
+    this.version(13).stores({
+      payslips: "id, employee_id, period, status, generated_at, [employee_id+period]",
+    });
+    /**
+     * v14: HR Management module — performance reviews.
+     */
+    this.version(14).stores({
+      performanceReviews: "id, employee_id, period, reviewed_at, [employee_id+period]",
+    });
+    /**
+     * v15: HR Management module — announcements and audit logs.
+     */
+    this.version(15).stores({
+      announcements: "id, status, created_at",
+      auditLogs: "id, actor_id, resource, created_at",
     });
   }
 }
@@ -1040,3 +1095,14 @@ export * from "./notifications";
 export * from "./settings";
 export * from "./reports";
 export * from "./reports-3d";
+export * from "./designations";
+export * from "./shifts";
+export * from "./employees";
+export * from "./attendance";
+export * from "./leave-types";
+export * from "./leave-requests";
+export * from "./payroll";
+export * from "./performance";
+export * from "./announcements";
+export * from "./audit";
+export * from "./hrm-settings";

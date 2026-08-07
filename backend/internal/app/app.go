@@ -7,6 +7,14 @@ import (
 	"github.com/SandaruwanWeerawardhana/pos-backend/internal/routes"
 )
 
+// Permission names the HRM routes gate on. Seeded by migration 00017 and
+// mirrored in the frontend's PERMISSIONS list — that list is the contract, so a
+// name added here has to exist on both sides or it is unreachable in the UI.
+const (
+	permissionHRMView   = "hrm.view"
+	permissionHRMManage = "hrm.manage"
+)
+
 func New(container *Container) *fiber.App {
 	cfg := container.Config
 	app := fiber.New(fiber.Config{
@@ -43,6 +51,12 @@ func New(container *Container) *fiber.App {
 			cfg.Security.AuthRateLimitMax,
 			cfg.Security.AuthRateLimitWindow,
 		),
+		// Permission gates. Mounted after Auth on the routes that use them, so
+		// they read the user id Auth put on the context.
+		routes.Gates{
+			HRMView:   middleware.RequirePermission(container.Authorization, permissionHRMView),
+			HRMManage: middleware.RequirePermission(container.Authorization, permissionHRMManage),
+		},
 	)
 	return app
 }

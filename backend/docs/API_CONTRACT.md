@@ -6,6 +6,10 @@ specification** — the shapes below are what it sends and reads, not proposals.
 
 Flip `NEXT_PUBLIC_USE_MOCK_API=false` and the app runs against this API.
 
+The HRM module (`/hrm/*`) is documented separately in
+[HRM_MODULE.md](HRM_MODULE.md) — it is additive, follows the same conventions,
+and changes nothing below.
+
 ## Conventions
 
 | Rule | Detail |
@@ -385,8 +389,16 @@ assign), `cashier` (`pos.sell`, `pos.discount`, `products.view` — deliberately
 **no** refund, since reversing a sale is a supervisor action),
 `warehouse_staff` (stock and goods-in, nothing at the till).
 
-⚠️ Endpoints are currently gated on **authentication only**, not on these
-permissions. Per-route enforcement is Phase 2.
+⚠️ The Phase 1 endpoints above are gated on **authentication only**, not on
+these permissions. Per-route enforcement for them is Phase 2.
+
+The HRM module is the exception: `/hrm/*` is gated per route on `hrm.view` and
+`hrm.manage` via `middleware.RequirePermission`, which resolves a user's
+effective permissions from their roles behind a cache bounded by
+`AUTH_PERMISSION_CACHE_TTL`. Permissions are deliberately **not** carried in the
+access token — it lives 12h, so a claim would outlive a revocation by most of a
+shift. The same middleware is what the Phase 1 routes will use when their gating
+lands.
 
 ## Phase 2
 

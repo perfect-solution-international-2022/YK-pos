@@ -390,6 +390,188 @@ export interface Supplier {
   total_purchase_return_due_cents: number;
 }
 
+export type EmployeeGender = "male" | "female" | "other";
+export type EmploymentType = "full_time" | "part_time" | "contract" | "intern";
+
+export interface EmployeeDocument {
+  name: string;
+  data_url: string;
+  size: number;
+}
+
+export interface Employee {
+  id: string;
+  /** Auto-generated, sequential — same pattern as `Supplier.code`. */
+  employee_code: string;
+  full_name: string;
+  nic: string;
+  /** ISO date (yyyy-mm-dd), from a native `<input type="date">`. */
+  date_of_birth: string;
+  gender: EmployeeGender;
+  phone: string;
+  email?: string;
+  address?: string;
+  emergency_contact_name?: string;
+  emergency_contact_phone?: string;
+
+  designation_id: string;
+  joining_date: string;
+  employment_type: EmploymentType;
+  shift_id: string;
+
+  basic_salary_cents: number;
+  bank_name?: string;
+  bank_account_no?: string;
+  bank_branch?: string;
+
+  /** Set only when this employee also has a till/back-office login. */
+  staff_user_id?: string;
+
+  /** Data URL, same as every other image in this local-first app. */
+  photo?: string;
+  documents: EmployeeDocument[];
+
+  active: boolean;
+  created_at: number;
+}
+
+export interface Designation {
+  id: string;
+  name: string;
+  description?: string;
+  active: boolean;
+  created_at: number;
+}
+
+export interface Shift {
+  id: string;
+  name: string;
+  /** "HH:mm" */
+  start_time: string;
+  /** "HH:mm" */
+  end_time: string;
+  break_minutes: number;
+  grace_minutes: number;
+  /** 0 (Sun) – 6 (Sat) */
+  weekly_off: number[];
+  active: boolean;
+  created_at: number;
+}
+
+export type AttendanceStatus = "present" | "late" | "half_day" | "absent";
+
+export interface AttendanceRecord {
+  id: string;
+  employee_id: string;
+  /** yyyy-mm-dd, from `localDateKey` in `lib/db/reports.ts`. */
+  date: string;
+  clock_in?: number;
+  clock_out?: number;
+  status: AttendanceStatus;
+  notes?: string;
+  created_at: number;
+}
+
+export interface LeaveType {
+  id: string;
+  name: string;
+  days_per_year: number;
+  paid: boolean;
+  active: boolean;
+  created_at: number;
+}
+
+export type LeaveStatus = "pending" | "approved" | "rejected";
+
+export interface LeaveRequest {
+  id: string;
+  employee_id: string;
+  leave_type_id: string;
+  start_date: string;
+  /** Inclusive. */
+  end_date: string;
+  /** Inclusive day count, computed on create. */
+  days: number;
+  reason?: string;
+  status: LeaveStatus;
+  decision_note?: string;
+  requested_at: number;
+  decided_at?: number;
+  /** StaffUser/Employee id of whoever approved or rejected it. */
+  decided_by?: string;
+}
+
+export type PayslipStatus = "unpaid" | "paid";
+
+export interface Payslip {
+  id: string;
+  employee_id: string;
+  /** "yyyy-mm" */
+  period: string;
+  /** Snapshot of `Employee.basic_salary_cents` at generation time. */
+  basic_salary_cents: number;
+  allowances_cents: number;
+  deductions_cents: number;
+  /** `basic_salary_cents + allowances_cents - deductions_cents`. */
+  net_cents: number;
+  status: PayslipStatus;
+  generated_at: number;
+  paid_at?: number;
+  notes?: string;
+}
+
+export interface PerformanceReview {
+  id: string;
+  employee_id: string;
+  /** yyyy-mm — the month this review covers. */
+  period: string;
+  /** 1-5. */
+  rating: number;
+  notes?: string;
+  /** StaffUser id of whoever wrote the review. */
+  reviewed_by?: string;
+  reviewed_at: number;
+}
+
+export type AnnouncementStatus = "draft" | "published" | "archived";
+
+export interface Announcement {
+  id: string;
+  title: string;
+  body: string;
+  status: AnnouncementStatus;
+  created_at: number;
+  published_at?: number;
+  /** StaffUser id. */
+  created_by?: string;
+}
+
+export interface AuditLogEntry {
+  id: string;
+  actor_id?: string;
+  actor_name: string;
+  /** e.g. "employee.create", "leave_request.approve". */
+  action: string;
+  /** e.g. "employee", "leave_request", "payslip". */
+  resource: string;
+  resource_id?: string;
+  /** Human-readable, e.g. the employee's name. */
+  resource_label?: string;
+  details?: string;
+  created_at: number;
+}
+
+export interface HrmSettings {
+  hr_contact_email?: string;
+  probation_period_days: number;
+  payroll_cycle: "monthly" | "biweekly";
+  /** 1-28. */
+  default_pay_day: number;
+  default_grace_minutes: number;
+  carry_forward_leave: boolean;
+  max_carry_forward_days: number;
+}
+
 export interface Customer {
   id: string;
   code: string;
@@ -586,6 +768,8 @@ export const PERMISSIONS = [
   "reports.view",
   "settings.manage",
   "users.manage",
+  "hrm.view",
+  "hrm.manage",
 ] as const;
 
 export type Permission = (typeof PERMISSIONS)[number];
@@ -642,7 +826,8 @@ export type NotificationKind =
   | "expiry"
   | "expired"
   | "sync"
-  | "system";
+  | "system"
+  | "announcement";
 
 export interface AppNotification {
   id: string;

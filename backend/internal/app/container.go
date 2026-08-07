@@ -28,9 +28,12 @@ type Container struct {
 	Redis       *redis.Client
 	Tokens      service.TokenService
 	Permissions service.PermissionService
-	AuditWorker *middleware.AuditWorker
-	Handlers    routes.Handlers
-	Health      *handler.HealthHandler
+	// Authorization resolves a user's effective permissions for the route
+	// gates. Separate from Permissions, which owns the permission catalogue.
+	Authorization service.AuthorizationService
+	AuditWorker   *middleware.AuditWorker
+	Handlers      routes.Handlers
+	Health        *handler.HealthHandler
 }
 
 func NewContainer(ctx context.Context) (*Container, error) {
@@ -98,6 +101,26 @@ func NewContainer(ctx context.Context) (*Container, error) {
 	orders := repository.NewOrderRepository(db)
 	tx := repository.NewTxManager(db)
 
+	/*
+		HRM. Every repository here is scoped by business_id the same way the POS
+		ones are; settings reuses the existing settings table rather than adding
+		three tables for three JSON documents, and the audit trail is read
+		through its own query repository so the append-only write side keeps its
+		small interface.
+	*/
+	designations := repository.NewDesignationRepository(db)
+	shifts := repository.NewShiftRepository(db)
+	employees := repository.NewEmployeeRepository(db)
+	attendance := repository.NewAttendanceRepository(db)
+	leaveTypes := repository.NewLeaveTypeRepository(db)
+	leaveRequests := repository.NewLeaveRequestRepository(db)
+	payrollRuns := repository.NewPayrollRepository(db)
+	performanceReviews := repository.NewPerformanceRepository(db)
+	announcements := repository.NewAnnouncementRepository(db)
+	hrmReports := repository.NewHRMReportRepository(db)
+	settings := repository.NewSettingRepository(db)
+	auditLogQueries := repository.NewAuditLogQueryRepository(db)
+
 	issuer := pkgjwt.NewIssuer(
 		cfg.JWT.AccessSecret,
 		cfg.JWT.Issuer,
@@ -132,15 +155,51 @@ func NewContainer(ctx context.Context) (*Container, error) {
 	orderSyncService := service.NewOrderSyncService(tx, service.DefaultOrderTxRepos)
 	orderService := service.NewOrderService(orders)
 
+	/*
+		Permissions are resolved per request behind a TTL cache rather than being
+		baked into the access token: the token lives 12 hours (cashiers work long
+		shifts), so a permission carried in a claim would survive a revocation
+		for the rest of the day. AUTH_PERMISSION_CACHE_TTL bounds that instead.
+	*/
+	authorizationService := service.NewAuthorizationService(users, roles, cfg.Auth.PermissionCacheTTL)
+
+	hrmSettingsService := service.NewHRMSettingsService(settings)
+	designationService := service.NewDesignationService(designations)
+	shiftService := service.NewShiftService(shifts)
+	employeeService := service.NewEmployeeService(service.EmployeeServiceDeps{
+		Employees:    employees,
+		Designations: designations,
+		Shifts:       shifts,
+		Users:        users,
+		Roles:        roles,
+		Tx:           tx,
+		NewTxRepos:   service.DefaultEmployeeTxRepos,
+	}, cfg.Bcrypt.Cost)
+	attendanceService := service.NewAttendanceService(attendance, employees, shifts, hrmSettingsService)
+	leaveService := service.NewLeaveService(
+		leaveTypes, leaveRequests, employees, shifts, attendance, hrmSettingsService,
+	)
+	payrollService := service.NewPayrollService(
+		payrollRuns, employees, attendance, leaveRequests, hrmSettingsService, tx,
+	)
+	performanceService := service.NewPerformanceService(performanceReviews, employees)
+	announcementService := service.NewAnnouncementService(announcements)
+	// The report service takes AttendanceService, not the repository: its
+	// attendance report is the summary endpoint's aggregate over a different
+	// window, and building it twice would be two places to drift.
+	hrmReportService := service.NewHRMReportService(hrmReports, attendanceService)
+	auditQueryService := service.NewAuditQueryService(auditLogQueries)
+
 	closeDB = false
 	return &Container{
-		Config:      cfg,
-		Logger:      logger,
-		DB:          db,
-		Redis:       redisClient,
-		Tokens:      tokenService,
-		Permissions: permissionService,
-		AuditWorker: auditWorker,
+		Config:        cfg,
+		Logger:        logger,
+		DB:            db,
+		Redis:         redisClient,
+		Tokens:        tokenService,
+		Permissions:   permissionService,
+		Authorization: authorizationService,
+		AuditWorker:   auditWorker,
 		Handlers: routes.Handlers{
 			/*
 				The reset token is echoed back in the response only in a local
@@ -151,6 +210,26 @@ func NewContainer(ctx context.Context) (*Container, error) {
 			Role:    handler.NewRoleHandler(roleService),
 			Product: handler.NewProductHandler(productService),
 			Order:   handler.NewOrderHandler(orderSyncService, orderService),
+			/*
+				The audit worker is passed to the HRM handlers that write:
+				personnel changes, attendance corrections, leave decisions,
+				payroll and settings are exactly what an auditor asks about
+				later, and the request-scoped detail those entries carry (IP,
+				user agent, request id) only exists at the handler layer.
+			*/
+			HRM: routes.HRMHandlers{
+				Designation:  handler.NewDesignationHandler(designationService),
+				Shift:        handler.NewShiftHandler(shiftService),
+				Employee:     handler.NewEmployeeHandler(employeeService, auditWorker),
+				Attendance:   handler.NewAttendanceHandler(attendanceService, employeeService, auditWorker),
+				Leave:        handler.NewLeaveHandler(leaveService, auditWorker),
+				Payroll:      handler.NewPayrollHandler(payrollService, auditWorker),
+				Performance:  handler.NewPerformanceHandler(performanceService),
+				Announcement: handler.NewAnnouncementHandler(announcementService),
+				Report:       handler.NewHRMReportHandler(hrmReportService),
+				Settings:     handler.NewHRMSettingsHandler(hrmSettingsService, auditWorker),
+				Audit:        handler.NewHRMAuditHandler(auditQueryService),
+			},
 		},
 		Health: handler.NewHealthHandler(sqlDB, redisClient),
 	}, nil
