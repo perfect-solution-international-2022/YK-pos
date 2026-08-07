@@ -19,6 +19,7 @@ import type {
   PaymentMethod,
   PaymentSplit,
   PendingOrder,
+  Payslip,
   Product,
   ProductUnitRecord,
   PurchaseOrder,
@@ -70,6 +71,7 @@ export class PosDB extends Dexie {
   attendance!: Table<AttendanceRecord, string>;
   leaveTypes!: Table<LeaveType, string>;
   leaveRequests!: Table<LeaveRequest, string>;
+  payslips!: Table<Payslip, string>;
 
   constructor() {
     super("posDB");
@@ -216,6 +218,12 @@ export class PosDB extends Dexie {
       attendance: "id, date, employee_id, [employee_id+date]",
       leaveTypes: "id, name",
       leaveRequests: "id, employee_id, status, requested_at, [employee_id+status]",
+    });
+    /**
+     * v13: HR Management module — payroll.
+     */
+    this.version(13).stores({
+      payslips: "id, employee_id, period, status, generated_at, [employee_id+period]",
     });
   }
 }
@@ -1074,3 +1082,4 @@ export * from "./employees";
 export * from "./attendance";
 export * from "./leave-types";
 export * from "./leave-requests";
+export * from "./payroll";

@@ -18,12 +18,14 @@ import {
   listAttendanceForDate,
   listEmployees,
   listLeaveRequests,
+  listPayslipsForPeriod,
   listShifts,
   localDateKey,
   upcomingBirthdays,
   type DailyAttendanceSummary,
 } from "@/lib/db";
-import type { AttendanceRecord, Employee, LeaveRequest, Shift } from "@/lib/types";
+import type { AttendanceRecord, Employee, LeaveRequest, Payslip, Shift } from "@/lib/types";
+import { useSettings } from "@/lib/hooks/use-settings";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { Card, PageHeader, SectionHeader } from "@/components/ui/PageHeader";
 import { StatCard } from "@/components/ui/StatCard";
@@ -38,25 +40,30 @@ const EMPTY_SUMMARY: DailyAttendanceSummary = {
 };
 
 export default function HrmDashboardPage() {
+  const { money } = useSettings();
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [shifts, setShifts] = useState<Shift[]>([]);
   const [todayRecords, setTodayRecords] = useState<AttendanceRecord[]>([]);
   const [leaveRequests, setLeaveRequests] = useState<LeaveRequest[]>([]);
+  const [periodPayslips, setPeriodPayslips] = useState<Payslip[]>([]);
   const [today, setToday] = useState("");
 
   useEffect(() => {
     const date = localDateKey(Date.now());
+    const period = date.slice(0, 7);
     void Promise.all([
       listEmployees(),
       listShifts(),
       listAttendanceForDate(date),
       listLeaveRequests(),
-    ]).then(([employeeList, shiftList, records, requests]) => {
+      listPayslipsForPeriod(period),
+    ]).then(([employeeList, shiftList, records, requests, payslips]) => {
       setToday(date);
       setEmployees(employeeList);
       setShifts(shiftList);
       setTodayRecords(records);
       setLeaveRequests(requests);
+      setPeriodPayslips(payslips);
     });
   }, []);
 
@@ -68,6 +75,13 @@ export default function HrmDashboardPage() {
       ? computeDailySummary(today, activeEmployees, shifts, todayRecords, onLeaveIds)
       : EMPTY_SUMMARY;
   const pendingLeaveCount = leaveRequests.filter((request) => request.status === "pending").length;
+  const payrollTotalCents = periodPayslips.reduce((sum, payslip) => sum + payslip.net_cents, 0);
+  const payslipSuffix = periodPayslips.length === 1 ? "" : "s";
+  const payrollValue = periodPayslips.length > 0 ? money(payrollTotalCents) : "—";
+  const payrollSub =
+    periodPayslips.length > 0
+      ? `${periodPayslips.length} payslip${payslipSuffix} this month`
+      : "No payslips generated for this month yet";
 
   return (
     <div className="flex flex-col gap-6 pb-8">
@@ -129,10 +143,11 @@ export default function HrmDashboardPage() {
         />
         <StatCard
           label="Payroll Summary"
-          value="—"
-          sub="Available once Payroll is live"
+          value={payrollValue}
+          sub={payrollSub}
           icon={<Wallet size={20} />}
           accent="secondary"
+          href={ROUTES.hrm.payroll}
         />
       </div>
 
@@ -141,19 +156,24 @@ export default function HrmDashboardPage() {
           <SectionHeader title="Upcoming birthdays" />
           <Card>
             <ul className="flex flex-col divide-y divide-outline-variant/50 dark:divide-zinc-800">
-              {birthdays.map(({ employee, daysUntil }) => (
-                <li
-                  key={employee.id}
-                  className="flex items-center justify-between gap-3 py-2.5 text-sm first:pt-0 last:pb-0"
-                >
-                  <span className="text-on-surface dark:text-zinc-50">
-                    {employee.full_name}
-                  </span>
-                  <span className="text-on-surface-variant dark:text-zinc-400">
-                    {daysUntil === 0 ? "Today" : `In ${daysUntil} day${daysUntil === 1 ? "" : "s"}`}
-                  </span>
-                </li>
-              ))}
+              {birthdays.map(({ employee, daysUntil }) => {
+                const daySuffix = daysUntil === 1 ? "" : "s";
+                const birthdayTiming =
+                  daysUntil === 0 ? "Today" : `In ${daysUntil} day${daySuffix}`;
+                return (
+                  <li
+                    key={employee.id}
+                    className="flex items-center justify-between gap-3 py-2.5 text-sm first:pt-0 last:pb-0"
+                  >
+                    <span className="text-on-surface dark:text-zinc-50">
+                      {employee.full_name}
+                    </span>
+                    <span className="text-on-surface-variant dark:text-zinc-400">
+                      {birthdayTiming}
+                    </span>
+                  </li>
+                );
+              })}
             </ul>
           </Card>
         </div>
