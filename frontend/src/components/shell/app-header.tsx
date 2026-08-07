@@ -45,7 +45,6 @@ const OFFICE_SIDEBAR_PATHS = [
   ROUTES.users.root,
   ROUTES.settings.root,
   ROUTES.profile,
-  ROUTES.admin,
 ];
 
 function formatTime(date: Date): string {

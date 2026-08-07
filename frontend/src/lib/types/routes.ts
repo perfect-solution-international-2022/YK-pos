@@ -9,7 +9,6 @@ export const ROUTES = {
     forgotPassword: "/auth/forgot-password",
     resetPassword: "/auth/reset-password",
   },
-  admin: "/admin",
   profile: "/profile",
   pos: {
     root: "/pos",
