@@ -1,21 +1,6 @@
 "use client";
 
-const TEAM = [
-  { initials: "AL", tint: "bg-secondary-container" },
-  { initials: "JS", tint: "bg-tertiary-container" },
-  { initials: "MK", tint: "bg-primary-container" },
-  { initials: "RD", tint: "bg-inverse-surface" },
-];
-
-const WEEK = [
-  { day: "Sun", date: 22 },
-  { day: "Mon", date: 23 },
-  { day: "Tue", date: 24 },
-  { day: "Wed", date: 25 },
-  { day: "Thu", date: 26 },
-  { day: "Fri", date: 27 },
-  { day: "Sat", date: 28 },
-];
+import Image from "next/image";
 
 export default function AuthLayout({
   children,
@@ -36,65 +21,14 @@ export default function AuthLayout({
         <section className="flex flex-col gap-8 p-8 sm:p-10">{children}</section>
 
         {/* visual panel (right) */}
-        <aside className="relative hidden overflow-hidden bg-gradient-to-br from-primary to-secondary p-8 text-on-primary md:block">
-          <div
-            aria-hidden
-            className="pointer-events-none absolute -top-16 -right-10 h-56 w-56 rounded-full bg-white/10 blur-2xl"
+        <aside className="relative hidden overflow-hidden bg-gradient-to-br from-primary to-secondary text-on-primary md:block">
+          <Image
+            src="/login%20bg.jpeg"
+            alt=""
+            fill
+            priority
+            className="object-cover object-center"
           />
-          <div
-            aria-hidden
-            className="pointer-events-none absolute bottom-0 -left-16 h-64 w-64 rounded-full bg-white/10 blur-3xl"
-          />
-
-          {/* top floating card */}
-          <div className="relative ml-auto w-max rounded-2xl bg-white/15 px-4 py-3 backdrop-blur">
-            <p className="text-sm font-semibold">Task review with team</p>
-            <p className="mt-0.5 text-xs text-on-primary/70">09:30am–10:00am</p>
-          </div>
-
-          {/* overlapping avatars */}
-          <div className="relative mt-10 flex justify-center">
-            {TEAM.map((member, i) => (
-              <span
-                key={member.initials}
-                className={`grid h-11 w-11 place-items-center rounded-full text-xs font-semibold text-on-primary ring-2 ring-white/50 ${member.tint} ${
-                  i === 0 ? "" : "-ml-3"
-                }`}
-              >
-                {member.initials}
-              </span>
-            ))}
-          </div>
-
-          {/* bottom floating card */}
-          <div className="relative mt-10 rounded-2xl bg-white/15 p-4 backdrop-blur">
-            <div className="flex items-center justify-between">
-              <p className="text-sm font-semibold">Daily meeting</p>
-              <span className="rounded-full bg-white/20 px-2 py-0.5 text-[10px]">
-                10:00am
-              </span>
-            </div>
-            <div className="mt-3 grid grid-cols-7 gap-1 text-center">
-              {WEEK.map((d) => {
-                const highlight = d.date === 24;
-                const cellClass = highlight
-                  ? "bg-tertiary-fixed text-on-tertiary-fixed"
-                  : "text-on-primary/80";
-                return (
-                  <div key={d.day} className="flex flex-col items-center gap-1">
-                    <span className="text-[10px] text-on-primary/60">
-                      {d.day}
-                    </span>
-                    <span
-                      className={`grid h-6 w-6 place-items-center rounded-full text-xs font-medium ${cellClass}`}
-                    >
-                      {d.date}
-                    </span>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
         </aside>
       </div>
     </main>
