@@ -215,7 +215,7 @@ export class PosDB extends Dexie {
     this.version(12).stores({
       attendance: "id, date, employee_id, [employee_id+date]",
       leaveTypes: "id, name",
-      leaveRequests: "id, employee_id, status, [employee_id+status]",
+      leaveRequests: "id, employee_id, status, requested_at, [employee_id+status]",
     });
   }
 }

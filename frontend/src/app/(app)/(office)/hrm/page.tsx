@@ -12,22 +12,62 @@ import {
   Users,
   Wallet,
 } from "lucide-react";
-import { listEmployees, upcomingBirthdays } from "@/lib/db";
-import type { Employee } from "@/lib/types";
+import {
+  activeLeaveToday,
+  computeDailySummary,
+  listAttendanceForDate,
+  listEmployees,
+  listLeaveRequests,
+  listShifts,
+  localDateKey,
+  upcomingBirthdays,
+  type DailyAttendanceSummary,
+} from "@/lib/db";
+import type { AttendanceRecord, Employee, LeaveRequest, Shift } from "@/lib/types";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { Card, PageHeader, SectionHeader } from "@/components/ui/PageHeader";
 import { StatCard } from "@/components/ui/StatCard";
 import { ROUTES } from "@/lib/types/routes";
 
+const EMPTY_SUMMARY: DailyAttendanceSummary = {
+  present: 0,
+  late: 0,
+  halfDay: 0,
+  absent: 0,
+  onLeave: 0,
+};
+
 export default function HrmDashboardPage() {
   const [employees, setEmployees] = useState<Employee[]>([]);
+  const [shifts, setShifts] = useState<Shift[]>([]);
+  const [todayRecords, setTodayRecords] = useState<AttendanceRecord[]>([]);
+  const [leaveRequests, setLeaveRequests] = useState<LeaveRequest[]>([]);
+  const [today, setToday] = useState("");
 
   useEffect(() => {
-    listEmployees().then(setEmployees);
+    const date = localDateKey(Date.now());
+    void Promise.all([
+      listEmployees(),
+      listShifts(),
+      listAttendanceForDate(date),
+      listLeaveRequests(),
+    ]).then(([employeeList, shiftList, records, requests]) => {
+      setToday(date);
+      setEmployees(employeeList);
+      setShifts(shiftList);
+      setTodayRecords(records);
+      setLeaveRequests(requests);
+    });
   }, []);
 
   const activeEmployees = employees.filter((employee) => employee.active);
   const birthdays = upcomingBirthdays(activeEmployees, 30);
+  const onLeaveIds = activeLeaveToday(leaveRequests, today);
+  const summary =
+    activeEmployees.length > 0
+      ? computeDailySummary(today, activeEmployees, shifts, todayRecords, onLeaveIds)
+      : EMPTY_SUMMARY;
+  const pendingLeaveCount = leaveRequests.filter((request) => request.status === "pending").length;
 
   return (
     <div className="flex flex-col gap-6 pb-8">
@@ -54,38 +94,38 @@ export default function HrmDashboardPage() {
         />
         <StatCard
           label="Present Today"
-          value="—"
-          sub="Available once Attendance is live"
+          value={String(summary.present + summary.late + summary.halfDay)}
           icon={<Clock size={20} />}
           accent="success"
+          href={ROUTES.hrm.attendance}
         />
         <StatCard
           label="Absent Today"
-          value="—"
-          sub="Available once Attendance is live"
+          value={String(summary.absent)}
           icon={<UserX size={20} />}
           accent="error"
+          href={ROUTES.hrm.attendance}
         />
         <StatCard
           label="Late Today"
-          value="—"
-          sub="Available once Attendance is live"
+          value={String(summary.late)}
           icon={<AlarmClock size={20} />}
           accent="warning"
+          href={ROUTES.hrm.attendance}
         />
         <StatCard
           label="Employees On Leave"
-          value="—"
-          sub="Available once Leave Management is live"
+          value={String(summary.onLeave)}
           icon={<CalendarOff size={20} />}
           accent="info"
+          href={ROUTES.hrm.leave}
         />
         <StatCard
           label="Pending Leave Requests"
-          value="—"
-          sub="Available once Leave Management is live"
+          value={String(pendingLeaveCount)}
           icon={<Inbox size={20} />}
           accent="orange"
+          href={ROUTES.hrm.leave}
         />
         <StatCard
           label="Payroll Summary"
