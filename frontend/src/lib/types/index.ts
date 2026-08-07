@@ -501,6 +501,77 @@ export interface LeaveRequest {
   decided_by?: string;
 }
 
+export type PayslipStatus = "unpaid" | "paid";
+
+export interface Payslip {
+  id: string;
+  employee_id: string;
+  /** "yyyy-mm" */
+  period: string;
+  /** Snapshot of `Employee.basic_salary_cents` at generation time. */
+  basic_salary_cents: number;
+  allowances_cents: number;
+  deductions_cents: number;
+  /** `basic_salary_cents + allowances_cents - deductions_cents`. */
+  net_cents: number;
+  status: PayslipStatus;
+  generated_at: number;
+  paid_at?: number;
+  notes?: string;
+}
+
+export interface PerformanceReview {
+  id: string;
+  employee_id: string;
+  /** yyyy-mm — the month this review covers. */
+  period: string;
+  /** 1-5. */
+  rating: number;
+  notes?: string;
+  /** StaffUser id of whoever wrote the review. */
+  reviewed_by?: string;
+  reviewed_at: number;
+}
+
+export type AnnouncementStatus = "draft" | "published" | "archived";
+
+export interface Announcement {
+  id: string;
+  title: string;
+  body: string;
+  status: AnnouncementStatus;
+  created_at: number;
+  published_at?: number;
+  /** StaffUser id. */
+  created_by?: string;
+}
+
+export interface AuditLogEntry {
+  id: string;
+  actor_id?: string;
+  actor_name: string;
+  /** e.g. "employee.create", "leave_request.approve". */
+  action: string;
+  /** e.g. "employee", "leave_request", "payslip". */
+  resource: string;
+  resource_id?: string;
+  /** Human-readable, e.g. the employee's name. */
+  resource_label?: string;
+  details?: string;
+  created_at: number;
+}
+
+export interface HrmSettings {
+  hr_contact_email?: string;
+  probation_period_days: number;
+  payroll_cycle: "monthly" | "biweekly";
+  /** 1-28. */
+  default_pay_day: number;
+  default_grace_minutes: number;
+  carry_forward_leave: boolean;
+  max_carry_forward_days: number;
+}
+
 export interface Customer {
   id: string;
   code: string;
@@ -755,7 +826,8 @@ export type NotificationKind =
   | "expiry"
   | "expired"
   | "sync"
-  | "system";
+  | "system"
+  | "announcement";
 
 export interface AppNotification {
   id: string;

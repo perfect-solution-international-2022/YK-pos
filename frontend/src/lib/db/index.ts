@@ -1,8 +1,10 @@
 import Dexie, { type Table } from "dexie";
 import { computeCartTotal } from "@/lib/cart-math";
 import type {
+  Announcement,
   AppNotification,
   AttendanceRecord,
+  AuditLogEntry,
   Brand,
   CartItem,
   CartTotal,
@@ -19,6 +21,7 @@ import type {
   PaymentMethod,
   PaymentSplit,
   PendingOrder,
+  PerformanceReview,
   Payslip,
   Product,
   ProductUnitRecord,
@@ -72,6 +75,9 @@ export class PosDB extends Dexie {
   leaveTypes!: Table<LeaveType, string>;
   leaveRequests!: Table<LeaveRequest, string>;
   payslips!: Table<Payslip, string>;
+  performanceReviews!: Table<PerformanceReview, string>;
+  announcements!: Table<Announcement, string>;
+  auditLogs!: Table<AuditLogEntry, string>;
 
   constructor() {
     super("posDB");
@@ -224,6 +230,19 @@ export class PosDB extends Dexie {
      */
     this.version(13).stores({
       payslips: "id, employee_id, period, status, generated_at, [employee_id+period]",
+    });
+    /**
+     * v14: HR Management module — performance reviews.
+     */
+    this.version(14).stores({
+      performanceReviews: "id, employee_id, period, reviewed_at, [employee_id+period]",
+    });
+    /**
+     * v15: HR Management module — announcements and audit logs.
+     */
+    this.version(15).stores({
+      announcements: "id, status, created_at",
+      auditLogs: "id, actor_id, resource, created_at",
     });
   }
 }
@@ -1083,3 +1102,7 @@ export * from "./attendance";
 export * from "./leave-types";
 export * from "./leave-requests";
 export * from "./payroll";
+export * from "./performance";
+export * from "./announcements";
+export * from "./audit";
+export * from "./hrm-settings";
