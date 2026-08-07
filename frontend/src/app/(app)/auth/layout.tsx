@@ -14,6 +14,7 @@ export default function AuthLayout({
           alt=""
           fill
           priority
+          sizes="50vw"
           className="object-cover object-center"
         />
       </aside>
