@@ -1,12 +1,13 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { createEmployee } from "@/lib/db";
+import { createEmployee, logAudit } from "@/lib/db";
 import {
   EMPTY_EMPLOYEE_FORM,
   EmployeeForm,
   type EmployeeFormValues,
 } from "../components/EmployeeForm";
+import { useAuth } from "@/lib/hooks/use-auth";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { useToast } from "@/components/ui/Toast";
 import { ROUTES } from "@/lib/types/routes";
@@ -25,9 +26,10 @@ function optionalText(value: string): string | undefined {
 export default function CreateEmployeePage() {
   const router = useRouter();
   const { showToast } = useToast();
+  const { staff } = useAuth();
 
   async function handleSubmit(values: EmployeeFormValues) {
-    await createEmployee({
+    const employee = await createEmployee({
       full_name: values.full_name.trim(),
       nic: values.nic.trim(),
       date_of_birth: values.date_of_birth,
@@ -55,6 +57,14 @@ export default function CreateEmployeePage() {
             role_id: values.role_id,
           }
         : undefined,
+    });
+    await logAudit({
+      actor_id: staff?.id,
+      actor_name: staff?.name ?? "System",
+      action: "employee.create",
+      resource: "employee",
+      resource_id: employee.id,
+      resource_label: employee.full_name,
     });
     showToast("Employee created", "success");
     router.push(ROUTES.hrm.employees.root);

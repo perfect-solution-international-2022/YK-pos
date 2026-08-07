@@ -2,13 +2,14 @@
 
 import { use, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { displayUsername, getEmployee, getStaffUser, updateEmployee } from "@/lib/db";
+import { displayUsername, getEmployee, getStaffUser, logAudit, updateEmployee } from "@/lib/db";
 import type { Employee, StaffUser } from "@/lib/types";
 import {
   EMPTY_EMPLOYEE_FORM,
   EmployeeForm,
   type EmployeeFormValues,
 } from "../../components/EmployeeForm";
+import { useAuth } from "@/lib/hooks/use-auth";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { useToast } from "@/components/ui/Toast";
@@ -31,6 +32,7 @@ export default function EditEmployeePage({
   const { id } = use(params);
   const router = useRouter();
   const { showToast } = useToast();
+  const { staff } = useAuth();
   const [employee, setEmployee] = useState<Employee | null>(null);
   const [linkedUser, setLinkedUser] = useState<StaffUser | null>(null);
   const [notFound, setNotFound] = useState(false);
@@ -111,6 +113,14 @@ export default function EditEmployeePage({
             role_id: values.role_id,
           }
         : undefined,
+    });
+    await logAudit({
+      actor_id: staff?.id,
+      actor_name: staff?.name ?? "System",
+      action: "employee.update",
+      resource: "employee",
+      resource_id: employee.id,
+      resource_label: employee.full_name,
     });
     showToast("Employee updated", "success");
     router.push(ROUTES.hrm.employees.root);

@@ -14,7 +14,7 @@ import {
   User,
   X,
 } from "lucide-react";
-import { deleteEmployee, listDesignations, listEmployees } from "@/lib/db";
+import { deleteEmployee, listDesignations, listEmployees, logAudit } from "@/lib/db";
 import type { Designation, Employee, EmploymentType } from "@/lib/types";
 import { exportExcel, exportPdf, type ExportColumn } from "@/lib/export";
 import { Badge } from "@/components/ui/Badge";
@@ -24,6 +24,7 @@ import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { DataTable, type DataColumn } from "@/components/ui/DataTable";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { useToast } from "@/components/ui/Toast";
+import { useAuth } from "@/lib/hooks/use-auth";
 import { useSettings } from "@/lib/hooks/use-settings";
 import { ROUTES } from "@/lib/types/routes";
 
@@ -39,6 +40,7 @@ const EMPLOYMENT_TYPE_LABELS: Record<EmploymentType, string> = {
 export default function EmployeesPage() {
   const { showToast } = useToast();
   const { money } = useSettings();
+  const { staff } = useAuth();
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [designations, setDesignations] = useState<Designation[]>([]);
 
@@ -126,6 +128,14 @@ export default function EmployeesPage() {
     setDeleting(true);
     try {
       await deleteEmployee(pendingDelete.id);
+      await logAudit({
+        actor_id: staff?.id,
+        actor_name: staff?.name ?? "System",
+        action: "employee.delete",
+        resource: "employee",
+        resource_id: pendingDelete.id,
+        resource_label: pendingDelete.full_name,
+      });
       showToast("Employee removed", "success");
       setPendingDelete(null);
       await refresh();

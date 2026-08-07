@@ -6,9 +6,11 @@ import {
   createDesignation,
   deleteDesignation,
   listDesignations,
+  logAudit,
   updateDesignation,
 } from "@/lib/db";
 import type { Designation } from "@/lib/types";
+import { useAuth } from "@/lib/hooks/use-auth";
 import { Button } from "@/components/ui/Button";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { DataTable, type DataColumn } from "@/components/ui/DataTable";
@@ -58,6 +60,7 @@ function DesignationForm({
   onSaved,
 }: Readonly<DesignationFormProps>) {
   const { showToast } = useToast();
+  const { staff } = useAuth();
   const [name, setName] = useState(designation?.name ?? "");
   const [description, setDescription] = useState(designation?.description ?? "");
   const [active, setActive] = useState(designation?.active ?? true);
@@ -74,9 +77,25 @@ function DesignationForm({
     try {
       if (designation) {
         await updateDesignation(designation.id, { name, description, active });
+        await logAudit({
+          actor_id: staff?.id,
+          actor_name: staff?.name ?? "System",
+          action: "designation.update",
+          resource: "designation",
+          resource_id: designation.id,
+          resource_label: name,
+        });
         showToast(`${name} updated`, "success");
       } else {
-        await createDesignation({ name, description, active });
+        const created = await createDesignation({ name, description, active });
+        await logAudit({
+          actor_id: staff?.id,
+          actor_name: staff?.name ?? "System",
+          action: "designation.create",
+          resource: "designation",
+          resource_id: created.id,
+          resource_label: name,
+        });
         showToast(`${name} added`, "success");
       }
       onSaved();
@@ -159,6 +178,7 @@ function DesignationFormModal({
 
 export default function DesignationsPage() {
   const { showToast } = useToast();
+  const { staff } = useAuth();
 
   const [query, setQuery] = useState("");
   const [designations, setDesignations] = useState<Designation[]>([]);
@@ -181,6 +201,14 @@ export default function DesignationsPage() {
     setDeleting(true);
     try {
       await deleteDesignation(pendingDelete.id);
+      await logAudit({
+        actor_id: staff?.id,
+        actor_name: staff?.name ?? "System",
+        action: "designation.delete",
+        resource: "designation",
+        resource_id: pendingDelete.id,
+        resource_label: pendingDelete.name,
+      });
       showToast(`Deleted ${pendingDelete.name}`, "success");
       setSelectedIds((current) => current.filter((id) => id !== pendingDelete.id));
       setPendingDelete(null);

@@ -11,6 +11,7 @@ import {
   listEmployees,
   listLeaveRequests,
   listLeaveTypes,
+  logAudit,
   updateLeaveType,
 } from "@/lib/db";
 import type { Employee, LeaveRequest, LeaveStatus, LeaveType } from "@/lib/types";
@@ -48,6 +49,7 @@ interface RequestFormProps {
 
 function RequestForm({ employees, leaveTypes, onClose, onSaved }: Readonly<RequestFormProps>) {
   const { showToast } = useToast();
+  const { staff } = useAuth();
   const [employeeId, setEmployeeId] = useState("");
   const [leaveTypeId, setLeaveTypeId] = useState("");
   const [startDate, setStartDate] = useState("");
@@ -64,12 +66,20 @@ function RequestForm({ employees, leaveTypes, onClose, onSaved }: Readonly<Reque
     setSaving(true);
     setError(null);
     try {
-      await createLeaveRequest({
+      const created = await createLeaveRequest({
         employee_id: employeeId,
         leave_type_id: leaveTypeId,
         start_date: startDate,
         end_date: endDate,
         reason: reason.trim() || undefined,
+      });
+      await logAudit({
+        actor_id: staff?.id,
+        actor_name: staff?.name ?? "System",
+        action: "leave_request.create",
+        resource: "leave_request",
+        resource_id: created.id,
+        resource_label: employees.find((employee) => employee.id === employeeId)?.full_name,
       });
       showToast("Leave request submitted", "success");
       onSaved();
@@ -172,6 +182,14 @@ function RequestsView({ employees }: Readonly<{ employees: Employee[] }>) {
   async function handleDecide(request: LeaveRequest, status: "approved" | "rejected") {
     try {
       await decideLeaveRequest(request.id, status, staff?.id ?? "");
+      await logAudit({
+        actor_id: staff?.id,
+        actor_name: staff?.name ?? "System",
+        action: status === "approved" ? "leave_request.approve" : "leave_request.reject",
+        resource: "leave_request",
+        resource_id: request.id,
+        resource_label: employeeById.get(request.employee_id),
+      });
       showToast(`Request ${status}`, "success");
       await refresh();
     } catch (error) {
@@ -312,6 +330,7 @@ interface LeaveTypeFormProps {
 
 function LeaveTypeForm({ leaveType, onClose, onSaved }: Readonly<LeaveTypeFormProps>) {
   const { showToast } = useToast();
+  const { staff } = useAuth();
   const [name, setName] = useState(leaveType?.name ?? "");
   const [daysPerYear, setDaysPerYear] = useState(String(leaveType?.days_per_year ?? 14));
   const [paid, setPaid] = useState(leaveType?.paid ?? true);
@@ -330,9 +349,25 @@ function LeaveTypeForm({ leaveType, onClose, onSaved }: Readonly<LeaveTypeFormPr
       const payload = { name, days_per_year: Number(daysPerYear) || 0, paid, active };
       if (leaveType) {
         await updateLeaveType(leaveType.id, payload);
+        await logAudit({
+          actor_id: staff?.id,
+          actor_name: staff?.name ?? "System",
+          action: "leave_type.update",
+          resource: "leave_type",
+          resource_id: leaveType.id,
+          resource_label: name,
+        });
         showToast(`${name} updated`, "success");
       } else {
-        await createLeaveType(payload);
+        const created = await createLeaveType(payload);
+        await logAudit({
+          actor_id: staff?.id,
+          actor_name: staff?.name ?? "System",
+          action: "leave_type.create",
+          resource: "leave_type",
+          resource_id: created.id,
+          resource_label: name,
+        });
         showToast(`${name} added`, "success");
       }
       onSaved();
@@ -380,6 +415,7 @@ function LeaveTypeForm({ leaveType, onClose, onSaved }: Readonly<LeaveTypeFormPr
 
 function LeaveTypesView() {
   const { showToast } = useToast();
+  const { staff } = useAuth();
   const [leaveTypes, setLeaveTypes] = useState<LeaveType[]>([]);
   const [formOpen, setFormOpen] = useState(false);
   const [editing, setEditing] = useState<LeaveType | null>(null);
@@ -397,6 +433,14 @@ function LeaveTypesView() {
     setDeleting(true);
     try {
       await deleteLeaveType(pendingDelete.id);
+      await logAudit({
+        actor_id: staff?.id,
+        actor_name: staff?.name ?? "System",
+        action: "leave_type.delete",
+        resource: "leave_type",
+        resource_id: pendingDelete.id,
+        resource_label: pendingDelete.name,
+      });
       showToast(`Deleted ${pendingDelete.name}`, "success");
       setPendingDelete(null);
       reload();

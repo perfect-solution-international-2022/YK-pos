@@ -17,10 +17,12 @@ import {
   listEmployees,
   listPayslips,
   localDateKey,
+  logAudit,
   markPayslipPaid,
   updatePayslip,
 } from "@/lib/db";
 import type { Designation, Employee, Payslip as PayslipRecord, PayslipStatus } from "@/lib/types";
+import { useAuth } from "@/lib/hooks/use-auth";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
@@ -64,6 +66,7 @@ interface SharedData {
 function SalaryListView({ employees, designations }: Readonly<SharedData>) {
   const { showToast } = useToast();
   const { money } = useSettings();
+  const { staff } = useAuth();
   const [period, setPeriod] = useState(currentPeriod());
   const [generating, setGenerating] = useState(false);
 
@@ -76,6 +79,16 @@ function SalaryListView({ employees, designations }: Readonly<SharedData>) {
     setGenerating(true);
     try {
       const result = await generatePayroll(period, employees);
+      if (result.created > 0) {
+        await logAudit({
+          actor_id: staff?.id,
+          actor_name: staff?.name ?? "System",
+          action: "payroll.generate",
+          resource: "payslip",
+          resource_label: periodLabel(period),
+          details: `${result.created} payslip${result.created === 1 ? "" : "s"} generated`,
+        });
+      }
       const payslipSuffix = result.created === 1 ? "" : "s";
       const skippedMessage =
         result.skipped > 0 ? ` (${result.skipped} already existed)` : "";
@@ -163,6 +176,7 @@ interface EditPayslipModalProps {
 
 function EditPayslipModal({ payslip, onClose, onSaved }: Readonly<EditPayslipModalProps>) {
   const { showToast } = useToast();
+  const { staff } = useAuth();
   const [allowances, setAllowances] = useState((payslip.allowances_cents / 100).toFixed(2));
   const [deductions, setDeductions] = useState((payslip.deductions_cents / 100).toFixed(2));
   const [notes, setNotes] = useState(payslip.notes ?? "");
@@ -177,6 +191,14 @@ function EditPayslipModal({ payslip, onClose, onSaved }: Readonly<EditPayslipMod
         allowances_cents: Math.round(Number(allowances) * 100) || 0,
         deductions_cents: Math.round(Number(deductions) * 100) || 0,
         notes: notes.trim() || undefined,
+      });
+      await logAudit({
+        actor_id: staff?.id,
+        actor_name: staff?.name ?? "System",
+        action: "payslip.update",
+        resource: "payslip",
+        resource_id: payslip.id,
+        resource_label: periodLabel(payslip.period),
       });
       showToast("Payslip updated", "success");
       onSaved();
@@ -215,6 +237,7 @@ function EditPayslipModal({ payslip, onClose, onSaved }: Readonly<EditPayslipMod
 function HistoryView({ employees, designations }: Readonly<SharedData>) {
   const { showToast } = useToast();
   const { money } = useSettings();
+  const { staff } = useAuth();
   const [payslips, setPayslips] = useState<PayslipRecord[]>([]);
   const [periodFilter, setPeriodFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState<"all" | PayslipStatus>("all");
@@ -255,6 +278,14 @@ function HistoryView({ employees, designations }: Readonly<SharedData>) {
   async function handleMarkPaid(payslip: PayslipRecord) {
     try {
       await markPayslipPaid(payslip.id);
+      await logAudit({
+        actor_id: staff?.id,
+        actor_name: staff?.name ?? "System",
+        action: "payslip.mark_paid",
+        resource: "payslip",
+        resource_id: payslip.id,
+        resource_label: periodLabel(payslip.period),
+      });
       showToast("Marked as paid", "success");
       reload();
     } catch (error) {
@@ -267,6 +298,14 @@ function HistoryView({ employees, designations }: Readonly<SharedData>) {
     setDeleting(true);
     try {
       await deletePayslip(pendingDelete.id);
+      await logAudit({
+        actor_id: staff?.id,
+        actor_name: staff?.name ?? "System",
+        action: "payslip.delete",
+        resource: "payslip",
+        resource_id: pendingDelete.id,
+        resource_label: periodLabel(pendingDelete.period),
+      });
       showToast("Payslip deleted", "success");
       setPendingDelete(null);
       reload();

@@ -143,149 +143,161 @@ export default function HrmReportsPage() {
     void load();
   }, [load]);
 
-  const employeeById = new Map(employees.map((employee) => [employee.id, employee]));
-  const designationById = new Map(designations.map((designation) => [designation.id, designation.name]));
+  const designationById = new Map(
+    designations.map((designation) => [designation.id, designation.name]),
+  );
+  const employeeById = new Map(employees.map((employee) => [employee.id, employee.full_name]));
 
   function employeeName(employeeId: string): string {
-    return employeeById.get(employeeId)?.full_name ?? "—";
+    return employeeById.get(employeeId) ?? "—";
   }
 
-  let columns: DataColumn<Employee>[] | DataColumn<AttendanceRecord>[] | DataColumn<LeaveRequest>[] | DataColumn<Payslip>[] = [];
-  let exportColumns: ExportColumn<Employee>[] | ExportColumn<AttendanceRecord>[] | ExportColumn<LeaveRequest>[] | ExportColumn<Payslip>[] = [];
-  let rows: Employee[] | AttendanceRecord[] | LeaveRequest[] | Payslip[] = [];
-  let emptyMessage = "No data in this range.";
-  let caption = "Report";
-
-  if (data?.key === "employees") {
-    rows = data.rows;
-    caption = "Employee report";
-    emptyMessage = "No employees yet.";
-    const employeeColumns: DataColumn<Employee>[] = [
-      { key: "code", header: "Code", sortValue: (e) => e.employee_code, render: (e) => e.employee_code },
-      { key: "name", header: "Name", sortValue: (e) => e.full_name, render: (e) => e.full_name },
-      {
-        key: "designation",
-        header: "Designation",
-        hideOnMobile: true,
-        render: (e) => designationById.get(e.designation_id) ?? "—",
-      },
-      {
-        key: "type",
-        header: "Employment Type",
-        hideOnMobile: true,
-        render: (e) => e.employment_type.replace("_", " "),
-      },
-      { key: "joined", header: "Joining Date", render: (e) => e.joining_date },
-      {
-        key: "status",
-        header: "Status",
-        align: "right",
-        render: (e) => <Badge variant={e.active ? "success" : "neutral"}>{e.active ? "Active" : "Inactive"}</Badge>,
-      },
-    ];
-    columns = employeeColumns;
-    exportColumns = [
-      { key: "code", header: "Code", value: (e) => e.employee_code },
-      { key: "name", header: "Name", value: (e) => e.full_name },
-      { key: "designation", header: "Designation", value: (e) => designationById.get(e.designation_id) ?? "—" },
-      { key: "type", header: "Employment Type", value: (e) => e.employment_type.replace("_", " ") },
-      { key: "joined", header: "Joining Date", value: (e) => e.joining_date },
-      { key: "status", header: "Status", value: (e) => (e.active ? "Active" : "Inactive") },
-    ];
-  } else if (data?.key === "attendance") {
-    rows = data.rows;
-    caption = "Attendance report";
-    const attendanceColumns: DataColumn<AttendanceRecord>[] = [
-      { key: "date", header: "Date", sortValue: (r) => r.date, render: (r) => r.date },
-      { key: "employee", header: "Employee", render: (r) => employeeName(r.employee_id) },
-      {
-        key: "clockIn",
-        header: "Clock In",
-        render: (r) => <span className="tabular-nums">{formatTime(r.clock_in)}</span>,
-      },
-      {
-        key: "clockOut",
-        header: "Clock Out",
-        render: (r) => <span className="tabular-nums">{formatTime(r.clock_out)}</span>,
-      },
-      {
-        key: "status",
-        header: "Status",
-        align: "right",
-        render: (r) => <Badge variant={STATUS_BADGE_VARIANT[r.status]}>{r.status.replace("_", " ")}</Badge>,
-      },
-    ];
-    columns = attendanceColumns;
-    exportColumns = [
-      { key: "date", header: "Date", value: (r) => r.date },
-      { key: "employee", header: "Employee", value: (r) => employeeName(r.employee_id) },
-      { key: "clockIn", header: "Clock In", value: (r) => formatTime(r.clock_in) },
-      { key: "clockOut", header: "Clock Out", value: (r) => formatTime(r.clock_out) },
-      { key: "status", header: "Status", value: (r) => r.status.replace("_", " ") },
-    ];
-  } else if (data?.key === "leave") {
-    rows = data.rows;
-    caption = "Leave report";
-    const leaveColumns: DataColumn<LeaveRequest>[] = [
-      { key: "employee", header: "Employee", render: (r) => employeeName(r.employee_id) },
-      { key: "type", header: "Leave Type", render: (r) => leaveTypeNames.get(r.leave_type_id) ?? "—" },
-      {
-        key: "dates",
-        header: "Dates",
-        hideOnMobile: true,
-        render: (r) => (
-          <span className="tabular-nums">
-            {r.start_date} – {r.end_date}
-          </span>
-        ),
-      },
-      { key: "days", header: "Days", align: "right", render: (r) => r.days },
-      {
-        key: "status",
-        header: "Status",
-        align: "right",
-        render: (r) => (
-          <Badge variant={LEAVE_BADGE_VARIANT[r.status]}>{r.status[0].toUpperCase() + r.status.slice(1)}</Badge>
-        ),
-      },
-    ];
-    columns = leaveColumns;
-    exportColumns = [
-      { key: "employee", header: "Employee", value: (r) => employeeName(r.employee_id) },
-      { key: "type", header: "Leave Type", value: (r) => leaveTypeNames.get(r.leave_type_id) ?? "—" },
-      { key: "dates", header: "Dates", value: (r) => `${r.start_date} - ${r.end_date}` },
-      { key: "days", header: "Days", value: (r) => r.days },
-      { key: "status", header: "Status", value: (r) => r.status },
-    ];
-  } else if (data?.key === "payroll") {
-    rows = data.rows;
-    caption = "Payroll report";
-    const payrollColumns: DataColumn<Payslip>[] = [
-      { key: "period", header: "Period", sortValue: (p) => p.period, render: (p) => periodLabel(p.period) },
-      { key: "employee", header: "Employee", render: (p) => employeeName(p.employee_id) },
-      {
-        key: "net",
-        header: "Net Pay",
-        align: "right",
-        render: (p) => <span className="font-semibold">{money(p.net_cents)}</span>,
-      },
-      {
-        key: "status",
-        header: "Status",
-        align: "right",
-        render: (p) => <Badge variant={p.status === "paid" ? "success" : "neutral"}>{p.status === "paid" ? "Paid" : "Unpaid"}</Badge>,
-      },
-    ];
-    columns = payrollColumns;
-    exportColumns = [
-      { key: "period", header: "Period", value: (p) => periodLabel(p.period) },
-      { key: "employee", header: "Employee", value: (p) => employeeName(p.employee_id) },
-      { key: "net", header: "Net Pay", value: (p) => money(p.net_cents) },
-      { key: "status", header: "Status", value: (p) => (p.status === "paid" ? "Paid" : "Unpaid") },
-    ];
+  // Column definitions do double duty: the on-screen table and the exporters
+  // read from the same shape, so an export can never drift from what's shown.
+  function buildColumns(): {
+    table: DataColumn<never>[];
+    exports: ExportColumn<never>[];
+  } {
+    switch (data?.key) {
+      case "employees": {
+        const table: DataColumn<Employee>[] = [
+          { key: "code", header: "Code", sortValue: (r) => r.employee_code, render: (r) => r.employee_code },
+          { key: "name", header: "Name", sortValue: (r) => r.full_name, render: (r) => r.full_name },
+          {
+            key: "designation",
+            header: "Designation",
+            hideOnMobile: true,
+            render: (r) => designationById.get(r.designation_id) ?? "—",
+          },
+          {
+            key: "type",
+            header: "Employment Type",
+            hideOnMobile: true,
+            render: (r) => r.employment_type.replace("_", " "),
+          },
+          { key: "joined", header: "Joining Date", sortValue: (r) => r.joining_date, render: (r) => r.joining_date },
+          {
+            key: "status",
+            header: "Status",
+            align: "right",
+            render: (r) => <Badge variant={r.active ? "success" : "neutral"}>{r.active ? "Active" : "Inactive"}</Badge>,
+          },
+        ];
+        const exports: ExportColumn<Employee>[] = [
+          { key: "code", header: "Code", value: (r) => r.employee_code },
+          { key: "name", header: "Name", value: (r) => r.full_name },
+          { key: "designation", header: "Designation", value: (r) => designationById.get(r.designation_id) ?? "—" },
+          { key: "type", header: "Employment Type", value: (r) => r.employment_type.replace("_", " ") },
+          { key: "joined", header: "Joining Date", value: (r) => r.joining_date },
+          { key: "status", header: "Status", value: (r) => (r.active ? "Active" : "Inactive") },
+        ];
+        return { table: table as DataColumn<never>[], exports: exports as ExportColumn<never>[] };
+      }
+      case "attendance": {
+        const table: DataColumn<AttendanceRecord>[] = [
+          { key: "date", header: "Date", sortValue: (r) => r.date, render: (r) => r.date },
+          { key: "employee", header: "Employee", render: (r) => employeeName(r.employee_id) },
+          {
+            key: "clockIn",
+            header: "Clock In",
+            render: (r) => <span className="tabular-nums">{formatTime(r.clock_in)}</span>,
+          },
+          {
+            key: "clockOut",
+            header: "Clock Out",
+            render: (r) => <span className="tabular-nums">{formatTime(r.clock_out)}</span>,
+          },
+          {
+            key: "status",
+            header: "Status",
+            align: "right",
+            render: (r) => (
+              <Badge variant={STATUS_BADGE_VARIANT[r.status]}>{r.status.replace("_", " ")}</Badge>
+            ),
+          },
+        ];
+        const exports: ExportColumn<AttendanceRecord>[] = [
+          { key: "date", header: "Date", value: (r) => r.date },
+          { key: "employee", header: "Employee", value: (r) => employeeName(r.employee_id) },
+          { key: "clockIn", header: "Clock In", value: (r) => formatTime(r.clock_in) },
+          { key: "clockOut", header: "Clock Out", value: (r) => formatTime(r.clock_out) },
+          { key: "status", header: "Status", value: (r) => r.status.replace("_", " ") },
+        ];
+        return { table: table as DataColumn<never>[], exports: exports as ExportColumn<never>[] };
+      }
+      case "leave": {
+        const table: DataColumn<LeaveRequest>[] = [
+          { key: "employee", header: "Employee", render: (r) => employeeName(r.employee_id) },
+          { key: "type", header: "Leave Type", render: (r) => leaveTypeNames.get(r.leave_type_id) ?? "—" },
+          {
+            key: "dates",
+            header: "Dates",
+            hideOnMobile: true,
+            render: (r) => (
+              <span className="tabular-nums">
+                {r.start_date} – {r.end_date}
+              </span>
+            ),
+          },
+          { key: "days", header: "Days", align: "right", sortValue: (r) => r.days, render: (r) => r.days },
+          {
+            key: "status",
+            header: "Status",
+            align: "right",
+            render: (r) => (
+              <Badge variant={LEAVE_BADGE_VARIANT[r.status]}>
+                {r.status[0].toUpperCase() + r.status.slice(1)}
+              </Badge>
+            ),
+          },
+        ];
+        const exports: ExportColumn<LeaveRequest>[] = [
+          { key: "employee", header: "Employee", value: (r) => employeeName(r.employee_id) },
+          { key: "type", header: "Leave Type", value: (r) => leaveTypeNames.get(r.leave_type_id) ?? "—" },
+          { key: "dates", header: "Dates", value: (r) => `${r.start_date} - ${r.end_date}` },
+          { key: "days", header: "Days", value: (r) => r.days },
+          { key: "status", header: "Status", value: (r) => r.status },
+        ];
+        return { table: table as DataColumn<never>[], exports: exports as ExportColumn<never>[] };
+      }
+      case "payroll": {
+        const table: DataColumn<Payslip>[] = [
+          { key: "period", header: "Period", sortValue: (r) => r.period, render: (r) => periodLabel(r.period) },
+          { key: "employee", header: "Employee", render: (r) => employeeName(r.employee_id) },
+          {
+            key: "net",
+            header: "Net Pay",
+            align: "right",
+            sortValue: (r) => r.net_cents,
+            render: (r) => <span className="font-semibold">{money(r.net_cents)}</span>,
+          },
+          {
+            key: "status",
+            header: "Status",
+            align: "right",
+            render: (r) => (
+              <Badge variant={r.status === "paid" ? "success" : "neutral"}>
+                {r.status === "paid" ? "Paid" : "Unpaid"}
+              </Badge>
+            ),
+          },
+        ];
+        const exports: ExportColumn<Payslip>[] = [
+          { key: "period", header: "Period", value: (r) => periodLabel(r.period) },
+          { key: "employee", header: "Employee", value: (r) => employeeName(r.employee_id) },
+          { key: "net", header: "Net Pay", value: (r) => money(r.net_cents) },
+          { key: "status", header: "Status", value: (r) => (r.status === "paid" ? "Paid" : "Unpaid") },
+        ];
+        return { table: table as DataColumn<never>[], exports: exports as ExportColumn<never>[] };
+      }
+      default:
+        return { table: [], exports: [] };
+    }
   }
 
-  const reportTitle = REPORTS.find((entry) => entry.value === report)?.label ?? "Report";
+  const { table, exports } = buildColumns();
+  const rows = (data?.rows ?? []) as never[];
+  const reportLabel = REPORTS.find((entry) => entry.value === report)?.label ?? "Report";
 
   return (
     <div className="flex flex-col gap-6 pb-8">
@@ -319,7 +331,8 @@ export default function HrmReportsPage() {
               type="button"
               variant="outline"
               size="sm"
-              onClick={() => exportPdf(reportTitle, rows as never[], exportColumns as never[])}
+              disabled={rows.length === 0}
+              onClick={() => exportPdf(reportLabel, rows, exports)}
             >
               <FileText size={15} />
               PDF
@@ -328,9 +341,8 @@ export default function HrmReportsPage() {
               type="button"
               variant="outline"
               size="sm"
-              onClick={() =>
-                exportExcel(report, reportTitle, rows as never[], exportColumns as never[])
-              }
+              disabled={rows.length === 0}
+              onClick={() => exportExcel(report, reportLabel, rows, exports)}
             >
               <FileSpreadsheet size={15} />
               EXCEL
@@ -339,11 +351,11 @@ export default function HrmReportsPage() {
         </div>
 
         <DataTable
-          columns={columns as DataColumn<never>[]}
-          rows={rows as never[]}
-          rowKey={(row: { id: string }) => row.id}
-          emptyMessage={emptyMessage}
-          caption={caption}
+          columns={table}
+          rows={rows}
+          rowKey={(row) => (row as { id: string }).id}
+          emptyMessage="No data in this range."
+          caption={reportLabel}
           pageSizeOptions={[10, 25, 50]}
         />
       </Card>

@@ -9,6 +9,7 @@ import {
   CalendarClock,
   CheckCheck,
   Info,
+  Megaphone,
   PackageX,
   RefreshCw,
 } from "lucide-react";
@@ -28,6 +29,7 @@ const KIND_ICONS: Record<NotificationKind, typeof Bell> = {
   expired: CalendarClock,
   sync: RefreshCw,
   system: Info,
+  announcement: Megaphone,
 };
 
 const KIND_TONE: Record<NotificationKind, string> = {
@@ -37,6 +39,7 @@ const KIND_TONE: Record<NotificationKind, string> = {
   expired: "text-error dark:text-red-400",
   sync: "text-secondary dark:text-green-400",
   system: "text-on-surface-variant dark:text-zinc-400",
+  announcement: "text-secondary dark:text-green-400",
 };
 
 const REFRESH_INTERVAL_MS = 120_000;

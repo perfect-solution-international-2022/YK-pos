@@ -7,6 +7,7 @@ import {
   deleteReview,
   listEmployees,
   listReviews,
+  logAudit,
   updateReview,
 } from "@/lib/db";
 import type { Employee, PerformanceReview } from "@/lib/types";
@@ -76,16 +77,33 @@ function ReviewForm({
     setSaving(true);
     setError(null);
     try {
+      const employeeName = employees.find((employee) => employee.id === employeeId)?.full_name;
       if (review) {
         await updateReview(review.id, { period, rating, notes: notes.trim() || undefined });
+        await logAudit({
+          actor_id: staff?.id,
+          actor_name: staff?.name ?? "System",
+          action: "performance_review.update",
+          resource: "performance_review",
+          resource_id: review.id,
+          resource_label: employeeName,
+        });
         showToast("Review updated", "success");
       } else {
-        await createReview({
+        const created = await createReview({
           employee_id: employeeId,
           period,
           rating,
           notes: notes.trim() || undefined,
           reviewed_by: staff?.id,
+        });
+        await logAudit({
+          actor_id: staff?.id,
+          actor_name: staff?.name ?? "System",
+          action: "performance_review.create",
+          resource: "performance_review",
+          resource_id: created.id,
+          resource_label: employeeName,
         });
         showToast("Review submitted", "success");
       }
@@ -149,6 +167,7 @@ function ReviewForm({
 
 export default function PerformancePage() {
   const { showToast } = useToast();
+  const { staff } = useAuth();
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [reviews, setReviews] = useState<PerformanceReview[]>([]);
   const [employeeFilter, setEmployeeFilter] = useState("all");
@@ -188,6 +207,14 @@ export default function PerformancePage() {
     setDeleting(true);
     try {
       await deleteReview(pendingDelete.id);
+      await logAudit({
+        actor_id: staff?.id,
+        actor_name: staff?.name ?? "System",
+        action: "performance_review.delete",
+        resource: "performance_review",
+        resource_id: pendingDelete.id,
+        resource_label: employeeById.get(pendingDelete.employee_id),
+      });
       showToast("Review deleted", "success");
       setPendingDelete(null);
       reload();

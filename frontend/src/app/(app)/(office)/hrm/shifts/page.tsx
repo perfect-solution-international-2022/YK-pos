@@ -2,8 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { Check, Pencil, Plus, Search, X } from "lucide-react";
-import { createShift, deleteShift, listShifts, updateShift } from "@/lib/db";
+import { createShift, deleteShift, listShifts, logAudit, updateShift } from "@/lib/db";
 import type { Shift } from "@/lib/types";
+import { useAuth } from "@/lib/hooks/use-auth";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
@@ -52,6 +53,7 @@ interface ShiftFormProps {
 
 function ShiftForm({ shift, onClose, onSaved }: Readonly<ShiftFormProps>) {
   const { showToast } = useToast();
+  const { staff } = useAuth();
   const [name, setName] = useState(shift?.name ?? "");
   const [startTime, setStartTime] = useState(shift?.start_time ?? "09:00");
   const [endTime, setEndTime] = useState(shift?.end_time ?? "18:00");
@@ -91,9 +93,25 @@ function ShiftForm({ shift, onClose, onSaved }: Readonly<ShiftFormProps>) {
       };
       if (shift) {
         await updateShift(shift.id, payload);
+        await logAudit({
+          actor_id: staff?.id,
+          actor_name: staff?.name ?? "System",
+          action: "shift.update",
+          resource: "shift",
+          resource_id: shift.id,
+          resource_label: name,
+        });
         showToast(`${name} updated`, "success");
       } else {
-        await createShift(payload);
+        const created = await createShift(payload);
+        await logAudit({
+          actor_id: staff?.id,
+          actor_name: staff?.name ?? "System",
+          action: "shift.create",
+          resource: "shift",
+          resource_id: created.id,
+          resource_label: name,
+        });
         showToast(`${name} added`, "success");
       }
       onSaved();
@@ -220,6 +238,7 @@ function ShiftFormModal({ open, shift, onClose, onSaved }: Readonly<ShiftFormMod
 
 export default function ShiftsPage() {
   const { showToast } = useToast();
+  const { staff } = useAuth();
 
   const [query, setQuery] = useState("");
   const [shifts, setShifts] = useState<Shift[]>([]);
@@ -242,6 +261,14 @@ export default function ShiftsPage() {
     setDeleting(true);
     try {
       await deleteShift(pendingDelete.id);
+      await logAudit({
+        actor_id: staff?.id,
+        actor_name: staff?.name ?? "System",
+        action: "shift.delete",
+        resource: "shift",
+        resource_id: pendingDelete.id,
+        resource_label: pendingDelete.name,
+      });
       showToast(`Deleted ${pendingDelete.name}`, "success");
       setSelectedIds((current) => current.filter((id) => id !== pendingDelete.id));
       setPendingDelete(null);
