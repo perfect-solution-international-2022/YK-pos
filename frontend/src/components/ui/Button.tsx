@@ -49,6 +49,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
     className = "",
     children,
     disabled,
+    type = "button",
     ...props
   },
   ref,
@@ -56,6 +57,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
   return (
     <button
       ref={ref}
+      type={type}
       disabled={disabled ?? loading}
       aria-busy={loading || undefined}
       className={`inline-flex select-none items-center justify-center gap-2 rounded-lg font-medium transition-all duration-[var(--duration-fast)] ease-[var(--ease-standard)] hover:scale-[1.02] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary active:scale-[0.97] active:duration-[var(--duration-instant)] disabled:pointer-events-none disabled:opacity-50 disabled:hover:scale-100 ${

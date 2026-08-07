@@ -168,6 +168,29 @@ export function DataTable<T>({
                   ariaSort =
                     sort?.direction === "asc" ? "ascending" : "descending";
                 }
+                let sortIcon = (
+                  <ChevronDown
+                    size={13}
+                    className="opacity-30 transition-opacity duration-[var(--duration-fast)] group-hover:opacity-70"
+                    aria-hidden
+                  />
+                );
+                if (active) {
+                  sortIcon =
+                    sort?.direction === "asc" ? (
+                      <ChevronUp
+                        size={13}
+                        className="animate-fade-in"
+                        aria-hidden
+                      />
+                    ) : (
+                      <ChevronDown
+                        size={13}
+                        className="animate-fade-in"
+                        aria-hidden
+                      />
+                    );
+                }
                 return (
                   <th
                     key={column.key}
@@ -187,27 +210,7 @@ export function DataTable<T>({
                         }`}
                       >
                         {column.header}
-                        {active ? (
-                          sort?.direction === "asc" ? (
-                            <ChevronUp
-                              size={13}
-                              className="animate-fade-in"
-                              aria-hidden
-                            />
-                          ) : (
-                            <ChevronDown
-                              size={13}
-                              className="animate-fade-in"
-                              aria-hidden
-                            />
-                          )
-                        ) : (
-                          <ChevronDown
-                            size={13}
-                            className="opacity-30 transition-opacity duration-[var(--duration-fast)] group-hover:opacity-70"
-                            aria-hidden
-                          />
-                        )}
+                        {sortIcon}
                       </button>
                     ) : (
                       column.header
@@ -288,7 +291,7 @@ export function DataTable<T>({
         <div className="flex items-center gap-4">
           {pageSizeOptions && (
             <label className="flex items-center gap-2 text-on-surface-variant dark:text-zinc-400">
-              Rows per page:
+              <span>Rows per page:</span>
               <select
                 value={rowsPerPage}
                 onChange={(event) => {

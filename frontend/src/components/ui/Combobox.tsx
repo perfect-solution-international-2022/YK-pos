@@ -8,7 +8,7 @@ import {
   type KeyboardEvent,
   type ReactNode,
 } from "react";
-import { Check, ChevronDown, Plus, Search } from "lucide-react";
+import { ChevronDown, Search } from "lucide-react";
 
 export interface ComboboxOption {
   value: string;
@@ -104,6 +104,11 @@ export function Combobox({
       (option) => option.label.toLowerCase() === trimmedQuery.toLowerCase(),
     );
   const rowCount = filtered.length + (canCreate ? 1 : 0);
+  const activeValue =
+    canCreate && activeIndex === filtered.length
+      ? trimmedQuery
+      : (filtered[activeIndex]?.value ?? "");
+  const listSize = Math.min(Math.max(rowCount, 2), 6);
 
   const selected = options.find((option) => option.value === value);
   const displayValue = selected?.label ?? value;
@@ -220,70 +225,42 @@ export function Combobox({
 
         {open && (
           <div className="animate-scale-in absolute z-30 mt-1 w-full origin-top overflow-hidden rounded-xl border border-outline-variant bg-surface-container-lowest shadow-popover dark:border-zinc-700 dark:bg-zinc-900">
-            <ul
+            <select
               id={listId}
-              role="listbox"
+              size={listSize}
+              value={activeValue}
+              onChange={(event) => commit(event.target.value)}
               aria-label={label ?? "Options"}
-              className="max-h-64 overflow-y-auto py-1"
+              className="max-h-64 w-full overflow-y-auto border-0 bg-transparent py-1 text-sm text-on-surface outline-none dark:text-zinc-100"
             >
               {filtered.map((option, index) => (
-                <li
+                <option
                   key={option.value}
+                  value={option.value}
                   id={`${listId}-option-${index}`}
-                  role="option"
-                  aria-selected={option.value === value}
-                  onMouseEnter={() => setActiveIndex(index)}
-                  onMouseDown={(event) => {
-                    event.preventDefault();
-                    commit(option.value);
-                  }}
-                  className={`flex min-h-11 cursor-pointer items-center justify-between gap-2 px-3 py-2 text-sm text-on-surface transition-colors duration-[var(--duration-instant)] dark:text-zinc-100 ${
-                    index === activeIndex
-                      ? "bg-surface-container dark:bg-zinc-800"
-                      : ""
-                  }`}
+                  className="min-h-11 bg-surface-container-lowest px-3 py-2 dark:bg-zinc-900"
                 >
-                  <span className="min-w-0">
-                    <span className="block truncate">{option.label}</span>
-                    {option.hint && (
-                      <span className="block truncate text-xs text-on-surface-variant dark:text-zinc-500">
-                        {option.hint}
-                      </span>
-                    )}
-                  </span>
-                  {option.value === value && (
-                    <Check size={15} className="shrink-0 text-secondary dark:text-green-400" />
-                  )}
-                </li>
+                  {option.label}
+                  {option.hint ? ` - ${option.hint}` : ""}
+                </option>
               ))}
 
               {canCreate && (
-                <li
+                <option
+                  value={trimmedQuery}
                   id={`${listId}-option-${filtered.length}`}
-                  role="option"
-                  aria-selected={false}
-                  onMouseEnter={() => setActiveIndex(filtered.length)}
-                  onMouseDown={(event) => {
-                    event.preventDefault();
-                    commit(trimmedQuery);
-                  }}
-                  className={`flex min-h-11 cursor-pointer items-center gap-2 px-3 py-2 text-sm font-medium text-secondary transition-colors duration-[var(--duration-instant)] dark:text-green-400 ${
-                    activeIndex === filtered.length
-                      ? "bg-surface-container dark:bg-zinc-800"
-                      : ""
-                  }`}
+                  className="min-h-11 bg-surface-container-lowest px-3 py-2 font-medium dark:bg-zinc-900"
                 >
-                  <Plus size={15} />
                   Use “{trimmedQuery}”
-                </li>
+                </option>
               )}
 
               {rowCount === 0 && (
-                <li className="px-3 py-3 text-sm text-on-surface-variant dark:text-zinc-500">
+                <option value="" disabled>
                   {emptyMessage}
-                </li>
+                </option>
               )}
-            </ul>
+            </select>
             {footer && (
               <div className="border-t border-outline-variant p-1.5 dark:border-zinc-700">
                 {footer}
