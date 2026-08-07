@@ -458,6 +458,49 @@ export interface Shift {
   created_at: number;
 }
 
+export type AttendanceStatus = "present" | "late" | "half_day" | "absent";
+
+export interface AttendanceRecord {
+  id: string;
+  employee_id: string;
+  /** yyyy-mm-dd, from `localDateKey` in `lib/db/reports.ts`. */
+  date: string;
+  clock_in?: number;
+  clock_out?: number;
+  status: AttendanceStatus;
+  notes?: string;
+  created_at: number;
+}
+
+export interface LeaveType {
+  id: string;
+  name: string;
+  days_per_year: number;
+  paid: boolean;
+  active: boolean;
+  created_at: number;
+}
+
+export type LeaveStatus = "pending" | "approved" | "rejected";
+
+export interface LeaveRequest {
+  id: string;
+  employee_id: string;
+  leave_type_id: string;
+  start_date: string;
+  /** Inclusive. */
+  end_date: string;
+  /** Inclusive day count, computed on create. */
+  days: number;
+  reason?: string;
+  status: LeaveStatus;
+  decision_note?: string;
+  requested_at: number;
+  decided_at?: number;
+  /** StaffUser/Employee id of whoever approved or rejected it. */
+  decided_by?: string;
+}
+
 export interface Customer {
   id: string;
   code: string;

@@ -91,7 +91,7 @@ export const ROUTES = {
     payroll: "/hrm/payroll",
     performance: "/hrm/performance",
     announcements: "/hrm/announcements",
-    reports: "/hrm/reports",
+    reports: "/reports/hrm",
     auditLogs: "/hrm/audit-logs",
     settings: "/hrm/settings",
   },

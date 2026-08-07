@@ -2,6 +2,7 @@ import Dexie, { type Table } from "dexie";
 import { computeCartTotal } from "@/lib/cart-math";
 import type {
   AppNotification,
+  AttendanceRecord,
   Brand,
   CartItem,
   CartTotal,
@@ -13,6 +14,8 @@ import type {
   Discount,
   Employee,
   HeldCart,
+  LeaveRequest,
+  LeaveType,
   PaymentMethod,
   PaymentSplit,
   PendingOrder,
@@ -64,6 +67,9 @@ export class PosDB extends Dexie {
   employees!: Table<Employee, string>;
   designations!: Table<Designation, string>;
   shifts!: Table<Shift, string>;
+  attendance!: Table<AttendanceRecord, string>;
+  leaveTypes!: Table<LeaveType, string>;
+  leaveRequests!: Table<LeaveRequest, string>;
 
   constructor() {
     super("posDB");
@@ -202,6 +208,14 @@ export class PosDB extends Dexie {
       employees: "id, employee_code, designation_id, shift_id",
       designations: "id, name",
       shifts: "id, name",
+    });
+    /**
+     * v12: HR Management module — attendance and leave.
+     */
+    this.version(12).stores({
+      attendance: "id, date, employee_id, [employee_id+date]",
+      leaveTypes: "id, name",
+      leaveRequests: "id, employee_id, status, [employee_id+status]",
     });
   }
 }
@@ -1057,3 +1071,6 @@ export * from "./reports-3d";
 export * from "./designations";
 export * from "./shifts";
 export * from "./employees";
+export * from "./attendance";
+export * from "./leave-types";
+export * from "./leave-requests";
